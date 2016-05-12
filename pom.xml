@@ -81,6 +81,18 @@
             <version>2.4.1</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.github.dreamhead</groupId>
+            <artifactId>moco-core</artifactId>
+            <version>0.10.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.dreamhead</groupId>
+            <artifactId>moco-runner</artifactId>
+            <version>0.10.2</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <repositories>

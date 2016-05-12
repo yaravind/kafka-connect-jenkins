@@ -1,0 +1,15 @@
+[
+  {
+    "request": {
+      "uri": "/api/json"
+    },
+    "response": {
+      "status": 200,
+      "file": "src/test/resources/all-jobs.json",
+      "headers": {
+        "Content-Type": "application/json;charset=UTF-8",
+        "X-Jenkins": "1.642.2"
+      }
+    }
+  }
+]
