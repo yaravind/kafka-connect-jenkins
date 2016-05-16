@@ -61,8 +61,13 @@
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.21</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
-            <version>1.7.10</version>
+            <version>1.7.21</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
@@ -92,6 +97,12 @@
             <artifactId>moco-runner</artifactId>
             <version>0.10.2</version>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 
