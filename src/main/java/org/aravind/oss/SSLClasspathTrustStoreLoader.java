@@ -7,6 +7,8 @@ import java.io.InputStream;
 import java.security.KeyStore;
 
 /**
+ * Enables unit testing by trusting self-signed certifcates.
+ *
  * @author Aravind R Yarram
  * @since 0.5.0
  */
