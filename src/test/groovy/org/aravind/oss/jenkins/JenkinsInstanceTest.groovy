@@ -5,14 +5,11 @@ import com.github.dreamhead.moco.Runner
 import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Specification
-import static com.github.dreamhead.moco.Moco.httpServer
 import static com.github.dreamhead.moco.Moco.httpsServer
 import static com.github.dreamhead.moco.MocoJsonRunner.jsonHttpServer
 import static com.github.dreamhead.moco.Runner.runner
-
 import static com.github.dreamhead.moco.Moco.pathResource
-
-//import com.github.dreamhead.moco.HttpsCertificate
+import static org.aravind.oss.SSLClasspathTrustStoreLoader.setTrustStore
 
 /**
  * @author Aravind R Yarram
@@ -23,11 +20,20 @@ class JenkinsInstanceTest extends Specification {
     @Shared
     Runner mock
 
+    @Shared
+    Runner httpsMock
+
     def setupSpec() {
         def server = jsonHttpServer(9191, pathResource("jenkins-mock-server-cfg.json"))
-        def httpsServer = httpsServer(9443, HttpsCertificate.certificate(pathResource("cert.jks"), "mocohttps", "mocohttps"))
         mock = runner(server)
         mock.start()
+
+        //trust the self-signed cert.jks
+        setTrustStore("/cert.jks", "mocohttps")
+
+        def httpsServer = httpsServer(9443, HttpsCertificate.certificate(pathResource("cert.jks"), "mocohttps", "mocohttps"))
+        httpsMock = runner(httpsServer)
+        httpsMock.start()
     }
 
     def "Supports Jenkins without authentication"() {
@@ -62,7 +68,6 @@ class JenkinsInstanceTest extends Specification {
         noExceptionThrown()
     }
 
-    @Ignore("Fix me")
     def "Supports Jenkins with SSL"() {
         when:
         def url = new URL("https://localhost:9443")
@@ -74,5 +79,6 @@ class JenkinsInstanceTest extends Specification {
 
     def cleanupSpec() {
         if (mock != null) mock.stop()
+        if (httpsMock != null) httpsMock.stop();
     }
 }
