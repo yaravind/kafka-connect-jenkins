@@ -1,7 +1,9 @@
 package org.aravind.oss.jenkins.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.aravind.oss.jenkins.Job;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Domain object representing the all jobs resource: /api/json
@@ -11,13 +13,17 @@ import org.aravind.oss.jenkins.Job;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Jenkins {
-    private Job jobs[];
+    private List<Job> jobs;
 
-    public Job[] getJobs() {
+    public List<Job> getJobs() {
         return jobs;
     }
 
-    public void setJobs(Job[] jobs) {
-        this.jobs = jobs;
+    public void setJobs(List<Job> jobs) {
+        this.jobs = Collections.unmodifiableList(jobs);
+    }
+
+    public int getJobCount() {
+        return getJobs() == null || getJobs().isEmpty() ? 0 : getJobs().size();
     }
 }

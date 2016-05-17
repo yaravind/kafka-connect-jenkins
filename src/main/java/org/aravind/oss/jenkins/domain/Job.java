@@ -1,15 +1,17 @@
 package org.aravind.oss.jenkins.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.aravind.oss.jenkins.JenkinsClient;
 
 /**
  * @author Aravind R Yarram
  * @since 0.5.0
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Job {
+public class Job extends JenkinsItem {
     private String name;
     private String url;
+    private String color;
 
     public String getColor() {
         return color;
@@ -34,7 +36,4 @@ public class Job {
     public void setUrl(String url) {
         this.url = url;
     }
-
-    String color;
-
 }
