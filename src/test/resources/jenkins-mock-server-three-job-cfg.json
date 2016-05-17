@@ -5,7 +5,7 @@
     },
     "response": {
       "status": 200,
-      "file": "src/test/resources/single-job.json",
+      "file": "src/test/resources/three-jobs.json",
       "headers": {
         "Content-Type": "application/json;charset=UTF-8",
         "X-Jenkins": "1.642.2"

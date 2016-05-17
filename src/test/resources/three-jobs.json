@@ -12,6 +12,16 @@
       "name": "Abdera-trunk",
       "url": "https://builds.apache.org/job/Abdera-trunk/",
       "color": "blue"
+    },
+    {
+      "name": "Accumulo-1.8",
+      "url": "https://builds.apache.org/job/Accumulo-1.8/",
+      "color": "blue"
+    },
+    {
+      "name": "Allura",
+      "url": "https://builds.apache.org/job/Allura/",
+      "color": "blue"
     }
   ]
 }
