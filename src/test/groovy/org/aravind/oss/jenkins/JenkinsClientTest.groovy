@@ -15,7 +15,7 @@ import static org.aravind.oss.SSLClasspathTrustStoreLoader.setTrustStore
  * @author Aravind R Yarram
  * @since 0.5.0
  */
-class JenkinsInstanceTest extends Specification {
+class JenkinsClientTest extends Specification {
 
     @Shared
     Runner mock
@@ -39,7 +39,7 @@ class JenkinsInstanceTest extends Specification {
     def "Supports Jenkins without authentication"() {
         when:
         def url = new URL("http://localhost:9191/")
-        def jenkins = new JenkinsInstance(url)
+        def jenkins = new JenkinsClient(url)
 
         then:
         noExceptionThrown()
@@ -48,7 +48,7 @@ class JenkinsInstanceTest extends Specification {
     def "Supports GET"() {
         given:
         def url = new URL("http://localhost:9191/api/json")
-        def jenkins = new JenkinsInstance(url)
+        def jenkins = new JenkinsClient(url)
 
         when:
         def allJobs = jenkins.get(256)
@@ -62,7 +62,7 @@ class JenkinsInstanceTest extends Specification {
     def "Supports Jenkins with authentication"() {
         when:
         def url = new URL("http://localhost:9191")
-        def jenkins = new JenkinsInstance(url)
+        def jenkins = new JenkinsClient(url)
 
         then:
         noExceptionThrown()
@@ -71,7 +71,7 @@ class JenkinsInstanceTest extends Specification {
     def "Supports Jenkins with SSL"() {
         when:
         def url = new URL("https://localhost:9443")
-        def jenkins = new JenkinsInstance(url)
+        def jenkins = new JenkinsClient(url)
 
         then:
         noExceptionThrown()

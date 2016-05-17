@@ -1,5 +1,8 @@
 package org.aravind.oss.jenkins;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.aravind.oss.jenkins.domain.Jenkins;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,20 +17,19 @@ import java.util.Optional;
  * @author Aravind R Yarram
  * @since 0.5.0
  */
-public class JenkinsInstance {
+public class JenkinsClient {
     private static final int SO_TIMEOUT_IN_MILLIS = 3000;
     private static final int CONN_TIMEOUT_IN_MILLIS = 500;
-    private final URL baseUrl;
-    private Optional<String> userName;
-    private Optional<String> passwordOrApiToken;
-    private HttpURLConnection conn;
+    private final URL resourceUrl;
+    private Optional<String> userName = Optional.empty();
+    private Optional<String> passwordOrApiToken = Optional.empty();
+    private ObjectMapper mapper = new ObjectMapper();
 
     /**
-     * @param url url of the jenkins instance
+     * @param url resource url of the jenkins item
      */
-    public JenkinsInstance(URL url) throws JenkinsException {
-        baseUrl = url;
-        connect();
+    public JenkinsClient(URL url) {
+        resourceUrl = url;
     }
 
     /**
@@ -35,35 +37,34 @@ public class JenkinsInstance {
      * @param uname    username if authentication is enabled in jenkins instance
      * @param password password or API token if authentication is enabled in jenkins instance
      */
-    public JenkinsInstance(URL url, String uname, String password) throws JenkinsException {
-        if (uname == null || uname.isEmpty()) {
+    public JenkinsClient(URL url, String uname, String password) throws JenkinsException {
+        if (uname.isEmpty()) {
             throw new JenkinsException("Missing Jenkins username for authentication");
         }
-        if (password == null || password.isEmpty()) {
+        if (password.isEmpty()) {
             throw new JenkinsException("Missing Jenkins password (or API token) for authentication");
         }
-        baseUrl = url;
+        resourceUrl = url;
         userName = Optional.of(uname);
         passwordOrApiToken = Optional.of(password);
-
-        connect();
-        conn.setRequestProperty("Authorization", "Basic " + getAuthenticationString());
     }
 
-    private void connect() throws JenkinsException {
+    public HttpURLConnection connect() throws JenkinsException {
+        HttpURLConnection conn = null;
         try {
-            conn = (HttpURLConnection) baseUrl.openConnection();
+            conn = (HttpURLConnection) resourceUrl.openConnection();
             conn.setConnectTimeout(CONN_TIMEOUT_IN_MILLIS);
             conn.setReadTimeout(SO_TIMEOUT_IN_MILLIS);
             conn.connect();
-        } catch (IOException e) {
-            throw new JenkinsException("Error while opening a connection to " + baseUrl, e);
-        }
-    }
 
-    private void disconnect() {
-        if (conn != null)
-            conn.disconnect();
+            if (userName.isPresent()) {
+                conn.setRequestProperty("Authorization", "Basic " + getAuthenticationString());
+            }
+
+            return conn;
+        } catch (IOException e) {
+            throw new JenkinsException("Error while opening a connection to " + resourceUrl, e);
+        }
     }
 
     private String getAuthenticationString() {
@@ -71,7 +72,9 @@ public class JenkinsInstance {
         return Base64.getEncoder().encodeToString(authString.getBytes());
     }
 
-    public Optional<String> get(int bufferSize) {
+    public Optional<String> get(int bufferSize) throws JenkinsException {
+        HttpURLConnection conn = connect();
+
         try {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             InputStream is = conn.getInputStream();
@@ -109,6 +112,21 @@ public class JenkinsInstance {
                 }
             } catch (IOException ex) {
                 // deal with the exception
+            }
+        }
+        return Optional.empty();
+    }
+
+    public Optional<Jenkins> getJenkins() throws JenkinsException {
+        Optional<String> resp = get(512);
+
+        if (resp.isPresent()) {
+            try {
+                Jenkins j = mapper.readValue(resp.get(), Jenkins.class);
+                return Optional.of(j);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return Optional.empty();
             }
         }
         return Optional.empty();
