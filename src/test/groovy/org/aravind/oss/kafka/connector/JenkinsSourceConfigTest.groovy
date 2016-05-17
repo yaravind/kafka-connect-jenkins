@@ -42,7 +42,7 @@ class JenkinsSourceConfigTest extends Specification {
 
     def "Not starting the 'jenkins.jobs.resource.path' property value with '/' should throw an exception"() {
         when:
-        def props = ['jenkins.jobs.resource.path': 'api/json']
+        def props = ['client.jobs.resource.path': 'api/json']
         def jenkinsCfg = new JenkinsSourceConfig(props)
 
         then:
