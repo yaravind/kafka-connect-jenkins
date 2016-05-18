@@ -1,3 +1,5 @@
+[![Build Status](https://snap-ci.com/yaravind/kafka-connect-jenkins/branch/master/build_image)](https://snap-ci.com/yaravind/kafka-connect-jenkins/branch/master)
+
 # Kafka Connect Jenkins
 
 Kafka Connect Connector for Jenkins Open Source Continuous Integration Tool.
