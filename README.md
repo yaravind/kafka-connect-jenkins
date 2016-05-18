@@ -62,7 +62,8 @@ To do
 - Maven 3.x
 - JDK 1.8 or newer
 - [Spock Framework](https://spockframework.github.io/spock/docs/1.0/index.html)
-
+- [Snap CI](https://snap-ci.com/yaravind/kafka-connect-jenkins/branch/master) for Continuous Integration
+- [JaCoCo](https://github.com/jacoco/jacoco) and [Coveralls](https://coveralls.io/github/yaravind/kafka-connect-jenkins) for code coverage
 
 ### Configurations
 
