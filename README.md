@@ -1,6 +1,4 @@
-[![Build Status](https://snap-ci.com/yaravind/kafka-connect-jenkins/branch/master/build_image)](https://snap-ci.com/yaravind/kafka-connect-jenkins/branch/master)
-
-[![Coverage Status](https://coveralls.io/repos/github/yaravind/kafka-connect-jenkins/badge.svg?branch=master)](https://coveralls.io/github/yaravind/kafka-connect-jenkins?branch=master)
+[![Build Status](https://snap-ci.com/yaravind/kafka-connect-jenkins/branch/master/build_image)](https://snap-ci.com/yaravind/kafka-connect-jenkins/branch/master) [![Coverage Status](https://coveralls.io/repos/github/yaravind/kafka-connect-jenkins/badge.svg?branch=master)](https://coveralls.io/github/yaravind/kafka-connect-jenkins?branch=master)
 
 # Kafka Connect Jenkins
 
