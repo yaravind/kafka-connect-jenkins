@@ -1,5 +1,7 @@
 [![Build Status](https://snap-ci.com/yaravind/kafka-connect-jenkins/branch/master/build_image)](https://snap-ci.com/yaravind/kafka-connect-jenkins/branch/master)
 
+[![Coverage Status](https://coveralls.io/repos/github/yaravind/kafka-connect-jenkins/badge.svg?branch=master)](https://coveralls.io/github/yaravind/kafka-connect-jenkins?branch=master)
+
 # Kafka Connect Jenkins
 
 Kafka Connect Connector for Jenkins Open Source Continuous Integration Tool.
@@ -60,7 +62,7 @@ To do
 ### Dependencies
 
 - Maven 3.x
-- JDK 1.8 or more
+- JDK 1.8 or newer
 - [Spock Framework](https://spockframework.github.io/spock/docs/1.0/index.html)
 
 
