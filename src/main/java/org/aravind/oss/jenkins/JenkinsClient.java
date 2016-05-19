@@ -85,8 +85,8 @@ public class JenkinsClient {
 
             // read the response body
             byte[] buf = new byte[bufferSize];
-            int ret = 0;
-            while ((ret = is.read(buf)) > 0) {
+
+            while (is.read(buf) > 0) {
                 bos.write(buf);
             }
 
