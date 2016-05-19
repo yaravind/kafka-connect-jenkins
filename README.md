@@ -1,4 +1,4 @@
-[![Build Status](https://snap-ci.com/yaravind/kafka-connect-jenkins/branch/master/build_image)](https://snap-ci.com/yaravind/kafka-connect-jenkins/branch/master) [![Coverage Status](https://coveralls.io/repos/github/yaravind/kafka-connect-jenkins/badge.svg?branch=master)](https://coveralls.io/github/yaravind/kafka-connect-jenkins?branch=master)
+[![Build Status](https://snap-ci.com/yaravind/kafka-connect-jenkins/branch/master/build_image)](https://snap-ci.com/yaravind/kafka-connect-jenkins/branch/master) [![Coverage Status](https://coveralls.io/repos/github/yaravind/kafka-connect-jenkins/badge.svg?branch=master)](https://coveralls.io/github/yaravind/kafka-connect-jenkins?branch=master) [![Codacy Badge](https://api.codacy.com/project/badge/grade/c6faadd0154740aeb202710fcdea3dfc)](https://www.codacy.com/app/yaravind/kafka-connect-jenkins/dashboard) [![HitCount](https://hitt.herokuapp.com/yaravind/kafka-connect-jenkins.svg)](https://github.com/yaravind/kafka-connect-jenkins)
 
 # Kafka Connect Jenkins
 
@@ -28,7 +28,7 @@ These **build events** enable the following use-cases
    - Cycle times of deployments
    - Build times
    - Build statuses
-- Consolidation opportunities thus reducing technical debt
+- Portfolio demographics enabling consolidation opportunities thus reducing technical debt
     - Diversity of technology stack (versions, libraries etc.)
     - Diversity of source control systems
     - Diversity of testing libraries
@@ -42,6 +42,7 @@ These **build events** enable the following use-cases
         - Operations
     - Diversity of build infrastructure deployments
         - Number of Masters, Build Agents and Executors
+    - Which teams have higher turnover?
 - Enterprise wide Release Health Scorecards
     - Trends on bugs
     - Trends on security checks
