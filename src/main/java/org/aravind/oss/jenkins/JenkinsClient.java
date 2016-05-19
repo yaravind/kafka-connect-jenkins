@@ -105,11 +105,10 @@ public class JenkinsClient {
 
                 if (es != null) {
                     ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                    int ret = 0;
 
                     // read the error response body so that the connection can be reused
                     byte[] buf = new byte[bufferSize];
-                    while ((ret = es.read(buf)) > 0) {
+                    while (es.read(buf) > 0) {
                         bos.write(buf);
                     }
                     // close the error stream so that the connection can be reused
