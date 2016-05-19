@@ -1,7 +1,6 @@
 package org.aravind.oss.jenkins.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.aravind.oss.jenkins.JenkinsClient;
 
 /**
  * @author Aravind R Yarram

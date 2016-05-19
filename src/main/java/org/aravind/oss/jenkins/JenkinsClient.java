@@ -2,6 +2,8 @@ package org.aravind.oss.jenkins;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.aravind.oss.jenkins.domain.Jenkins;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -24,6 +26,7 @@ public class JenkinsClient {
     private Optional<String> userName = Optional.empty();
     private Optional<String> passwordOrApiToken = Optional.empty();
     private ObjectMapper mapper = new ObjectMapper();
+    private static final Logger logger = LoggerFactory.getLogger(JenkinsClient.class);
 
     /**
      * @param url resource url of the jenkins item
@@ -63,6 +66,7 @@ public class JenkinsClient {
 
             return conn;
         } catch (IOException e) {
+            logger.error("Error while connecting to {}", resourceUrl, e);
             throw new JenkinsException("Error while opening a connection to " + resourceUrl, e);
         }
     }
@@ -91,11 +95,12 @@ public class JenkinsClient {
 
             return Optional.of(bos.toString());
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Error while HTTP GET to {}", resourceUrl, e);
             //Need to read even the error stream so that we can take advantage of socket reuse in Keep-Alive
             //http://docs.oracle.com/javase/7/docs/technotes/guides/net/http-keepalive.html
             try {
                 int respCode = ((HttpURLConnection) conn).getResponseCode();
+                logger.warn("HTTP response code {}", respCode);
                 InputStream es = ((HttpURLConnection) conn).getErrorStream();
 
                 if (es != null) {
@@ -111,7 +116,7 @@ public class JenkinsClient {
                     es.close();
                 }
             } catch (IOException ex) {
-                // deal with the exception
+                // ignore the exception
             }
         }
         return Optional.empty();
@@ -125,7 +130,7 @@ public class JenkinsClient {
                 Jenkins j = mapper.readValue(resp.get(), Jenkins.class);
                 return Optional.of(j);
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error("Error while parsing the JSON {}", resp.get(), e);
                 return Optional.empty();
             }
         }

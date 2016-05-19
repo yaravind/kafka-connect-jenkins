@@ -8,6 +8,8 @@ import org.aravind.oss.jenkins.JenkinsException;
 import org.aravind.oss.jenkins.JenkinsClient;
 import org.aravind.oss.jenkins.domain.Jenkins;
 import org.aravind.oss.jenkins.domain.Job;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.HttpURLConnection;
 import java.util.*;
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
 public class JenkinsSourceConnector extends SourceConnector {
     private JenkinsSourceConfig jenkinsCfg;
     private JenkinsClient client;
+    private static Logger logger = LoggerFactory.getLogger(JenkinsSourceConnector.class);
 
     @Override
     public String version() {
@@ -68,7 +71,7 @@ public class JenkinsSourceConnector extends SourceConnector {
             resp = client.getJenkins();
         } catch (JenkinsException e) {
             //TODO sometimes the client might have been brought down. Let us handle it silently for now.
-            e.printStackTrace();
+            logger.warn("Error while GET to " + jenkinsCfg.getJobsResource() + ". Ignoring it.", e);
         }
 
         if (resp.isPresent()) {
@@ -101,5 +104,6 @@ public class JenkinsSourceConnector extends SourceConnector {
 
     @Override
     public void stop() {
+        //Not used at this moment
     }
 }
