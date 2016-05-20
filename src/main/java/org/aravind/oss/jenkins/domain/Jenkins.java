@@ -26,4 +26,11 @@ public class Jenkins {
     public int getJobCount() {
         return getJobs() == null || getJobs().isEmpty() ? 0 : getJobs().size();
     }
+
+    @Override
+    public String toString() {
+        return "Jenkins{" +
+                "jobs=" + jobs +
+                '}';
+    }
 }

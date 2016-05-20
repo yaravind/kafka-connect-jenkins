@@ -53,6 +53,8 @@ class JenkinsSourceConnectorTest extends Specification {
 
         then:
         noExceptionThrown()
+
+        mock.stop()
     }
 
     def "Partitioning - Single job"() {

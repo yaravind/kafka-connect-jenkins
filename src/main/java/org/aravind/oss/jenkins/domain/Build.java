@@ -7,25 +7,16 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * @since 0.5.0
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Job extends JenkinsItem {
-    private String name;
+public class Build extends JenkinsItem {
+    private Long number;
     private String url;
-    private String color;
 
-    public String getColor() {
-        return color;
+    public Long getNumber() {
+        return number;
     }
 
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setNumber(Long number) {
+        this.number = number;
     }
 
     public String getUrl() {
@@ -38,10 +29,9 @@ public class Job extends JenkinsItem {
 
     @Override
     public String toString() {
-        return "Job{" +
-                "name='" + name + '\'' +
+        return "Build{" +
+                "number=" + number +
                 ", url='" + url + '\'' +
-                ", color='" + color + '\'' +
                 '}';
     }
 }

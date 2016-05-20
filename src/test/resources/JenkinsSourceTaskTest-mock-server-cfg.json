@@ -1,0 +1,15 @@
+[
+  {
+    "request": {
+      "uri": "/job/Abdera-trunk/api/json"
+    },
+    "response": {
+      "status": 200,
+      "file": "src/test/resources/abdera-trunk-builds.json",
+      "headers": {
+        "Content-Type": "application/json;charset=UTF-8",
+        "X-Jenkins": "1.642.2"
+      }
+    }
+  }
+]
