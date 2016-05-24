@@ -1,5 +1,6 @@
 package org.aravind.oss.kafka.connector;
 
+import org.apache.kafka.common.config.ConfigDef;
 import org.apache.kafka.connect.connector.Task;
 import org.apache.kafka.connect.errors.ConnectException;
 import org.apache.kafka.connect.source.SourceConnector;
@@ -105,5 +106,10 @@ public class JenkinsSourceConnector extends SourceConnector {
     @Override
     public void stop() {
         //Not used at this moment
+    }
+
+    @Override
+    public ConfigDef config() {
+        return JenkinsSourceConfig.DEFS;
     }
 }

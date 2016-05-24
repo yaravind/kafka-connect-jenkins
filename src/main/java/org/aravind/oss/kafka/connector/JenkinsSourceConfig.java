@@ -33,7 +33,7 @@ public class JenkinsSourceConfig extends AbstractConfig {
     public static final String JENKINS_PASSWORD_OR_API_TOKEN_CONFIG = "jenkins.password.or.api.token";
     private static final String JENKINS_PASSWORD_OR_API_TOKEN_DOC = "Password (or API Token) to use when connecting to protected Jenkins.";
 
-    private static final ConfigDef DEFS = new ConfigDef();
+    public static final ConfigDef DEFS = new ConfigDef();
 
     static {
         DEFS
