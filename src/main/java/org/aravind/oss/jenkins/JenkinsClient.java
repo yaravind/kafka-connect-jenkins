@@ -95,7 +95,7 @@ public class JenkinsClient {
 
             return Optional.of(bos.toString());
         } catch (IOException e) {
-            logger.error("Error while HTTP GET to {}", resourceUrl, e);
+            logger.warn("IGNORING this exception. Just a WARNING to debug this issue. Error while HTTP GET to {}", resourceUrl, e);
             //Need to read even the error stream so that we can take advantage of socket reuse in Keep-Alive
             //http://docs.oracle.com/javase/7/docs/technotes/guides/net/http-keepalive.html
             try {

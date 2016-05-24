@@ -10,7 +10,16 @@ import java.util.List;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BuildCollection {
+    private String name;
     private List<Build> builds;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public List<Build> getBuilds() {
         return builds;
@@ -20,10 +29,12 @@ public class BuildCollection {
         this.builds = builds;
     }
 
+
     @Override
     public String toString() {
         return "BuildCollection{" +
-                "builds=" + builds +
+                "name='" + name + '\'' +
+                ", builds=" + builds +
                 '}';
     }
 }

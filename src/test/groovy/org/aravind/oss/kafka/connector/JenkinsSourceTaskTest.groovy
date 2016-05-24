@@ -1,6 +1,7 @@
 package org.aravind.oss.kafka.connector
 
 import org.apache.kafka.connect.source.SourceTaskContext
+import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -46,10 +47,11 @@ class JenkinsSourceTaskTest extends Specification {
         sourceTask.start(taskProps)
 
         when:
-        def sourceRecord = sourceTask.poll()
+        def sourceRecords = sourceTask.poll()
 
         then:
-        sourceRecord == null
+        sourceRecords != null
+        sourceRecords.size() == 3
     }
 
     def "Should support multiple comma separated job urls as taskProps"() {
@@ -58,9 +60,25 @@ class JenkinsSourceTaskTest extends Specification {
         sourceTask.start(taskProps)
 
         when:
-        def sourceRecord = sourceTask.poll()
+        def sourceRecords = sourceTask.poll()
 
         then:
-        sourceRecord == null
+        sourceRecords != null
+        sourceRecords.size() == 3
+    }
+
+    @Ignore
+    //Negative tests
+    def "Wrong URL should continue without any errors"() {
+        given:
+        def taskProps = ['job.urls': 'http://wrong.host.name:8181/job/Abdera-trunk/']
+        sourceTask.start(taskProps)
+
+        when:
+        def sourceRecords = sourceTask.poll()
+        sourceTask.stop()
+
+        then:
+        sourceRecords != null
     }
 }
