@@ -56,7 +56,21 @@ These **build events** enable the following use-cases
 
 ## How to use it?
 
-To do
+### Standlone mode
+
+While testing, you might want to run the connector in standalone mode. Follow these steps
+
+1. Download Confluent platform 3.0.0 ZIP file from [here](http://www.confluent.io/download)
+2. Unzip it `unzip confluent-3.0.0-2.11.zip`
+3. Move to Confluent home directory `cd confluent-3.0.0`
+4. Start Zookeeper `./bin/zookeeper-server-start etc/kafka/zookeeper.properties`
+5. Start Kafka Broker `./bin/kafka-server-start ./etc/kafka/server.properties`
+6. Clone https://github.com/yaravind/kafka-connect-jenkins.git
+7. Run `mvn clean install`
+8. Update the `jenkins.base.url` property in `connect-jenkins-source.properties` file with your jenkins base url
+9. Add Jenkins connector to classpath and start the connector in standalone mode `CLASSPATH=./target/kafka-connect-jenkins-0.5.0-SNAPSHOT.jar /Users/p0c/tools/confluent-3.0.0/bin/connect-standalone connect-standalone.properties connect-jenkins-source.properties`
+   
+> If you need to proxy to connect to Jenkins then append these to the above command `-Dhttp.proxyHost=... -Dhttp.proxyPort=... -Dhttps.proxyHost=... -Dhttps.proxyPort=...`
 
 ### Dependencies
 
@@ -69,7 +83,11 @@ To do
 
 ### Configurations
 
-To do
+| Property | Mandatory? | Default value | Description | 
+|----------|------------|---------------|-------------|
+|jenkins.base.url|No|None|The URL where jenkins server is running|
+|tasks.max|Yes|1| |
+|topic|No|jenkins.connector.topic| |
 
 ## Contribute
 
