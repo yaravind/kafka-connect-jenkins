@@ -87,7 +87,8 @@ public class JenkinsSourceConnector extends SourceConnector {
             List<Map<String, String>> taskConfigs = new ArrayList<>(jobGroups.size());
 
             for (List<Job> group : jobGroups) {
-                Map<String, String> taskProps = new HashMap<>();
+                //Forward the config from connector to SourceTask so that they have access to the configured TOPIC NAME
+                Map<String, String> taskProps = new HashMap<>(jenkinsCfg.originalsStrings());
 
                 //Concatenate all job urls that need to be handled by a single task
                 String commaSeparatedJobUrls = group.stream()
@@ -111,5 +112,9 @@ public class JenkinsSourceConnector extends SourceConnector {
     @Override
     public ConfigDef config() {
         return JenkinsSourceConfig.DEFS;
+    }
+
+    public JenkinsSourceConfig getJenkinsCfg() {
+        return jenkinsCfg;
     }
 }

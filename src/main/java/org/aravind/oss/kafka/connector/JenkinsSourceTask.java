@@ -72,7 +72,7 @@ public class JenkinsSourceTask extends SourceTask {
                             records = new ArrayList<>(builds.getBuilds().size());
                             for (Build build : builds.getBuilds()) {
                                 Map sourceOffset = Collections.singletonMap("buildNumber", build.getNumber());
-                                SourceRecord record = new SourceRecord(sourcePartition, sourceOffset, "jenkines.test", Schema.STRING_SCHEMA, resp.get());
+                                SourceRecord record = new SourceRecord(sourcePartition, sourceOffset, taskProps.get(JenkinsSourceConfig.TOPIC_CONFIG), Schema.STRING_SCHEMA, resp.get());
                                 records.add(record);
                             }
                         } catch (IOException e) {

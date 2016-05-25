@@ -33,6 +33,10 @@ public class JenkinsSourceConfig extends AbstractConfig {
     public static final String JENKINS_PASSWORD_OR_API_TOKEN_CONFIG = "jenkins.password.or.api.token";
     private static final String JENKINS_PASSWORD_OR_API_TOKEN_DOC = "Password (or API Token) to use when connecting to protected Jenkins.";
 
+    public static final String TOPIC_CONFIG = "topic";
+    public static final String TOPIC_CONFIG_DOC = "This is the name of the Kafka Topic to which the source records containing Jenkins Build details are written to.";
+    public static final String TOPIC_CONFIG_DEFAULT = "jenkins.connector.topic";
+
     public static final ConfigDef DEFS = new ConfigDef();
 
     static {
@@ -40,7 +44,8 @@ public class JenkinsSourceConfig extends AbstractConfig {
                 .define(JENKINS_BASE_URL_CONFIG, ConfigDef.Type.STRING, ConfigDef.Importance.HIGH, JENKINS_BASE_URL_DOC)
                 .define(JENKINS_USERNAME_CONFIG, ConfigDef.Type.STRING, "", ConfigDef.Importance.LOW, JENKINS_USERNAME_CONFIG_DOC)
                 .define(JENKINS_PASSWORD_OR_API_TOKEN_CONFIG, ConfigDef.Type.STRING, "", ConfigDef.Importance.LOW, JENKINS_PASSWORD_OR_API_TOKEN_DOC)
-                .define(JOBS_RESOURCE_PATH_CONFIG, ConfigDef.Type.STRING, JOBS_RESOURCE_PATH_DEFAULT, ConfigDef.Importance.LOW, JOBS_RESOURCE_PATH_DOC);
+                .define(JOBS_RESOURCE_PATH_CONFIG, ConfigDef.Type.STRING, JOBS_RESOURCE_PATH_DEFAULT, ConfigDef.Importance.LOW, JOBS_RESOURCE_PATH_DOC)
+                .define(TOPIC_CONFIG, ConfigDef.Type.STRING, TOPIC_CONFIG_DEFAULT, ConfigDef.Importance.LOW, TOPIC_CONFIG_DOC);
     }
 
     public JenkinsSourceConfig(Map<String, String> originals) {
