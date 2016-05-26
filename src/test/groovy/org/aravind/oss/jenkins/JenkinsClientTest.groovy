@@ -51,7 +51,7 @@ class JenkinsClientTest extends Specification {
         def jenkins = new JenkinsClient(url)
 
         when:
-        def allJobs = jenkins.get(256)
+        def allJobs = jenkins.get()
 
         then:
         allJobs != null
