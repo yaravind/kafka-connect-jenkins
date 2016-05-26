@@ -1,15 +1,15 @@
 package org.aravind.oss.jenkins;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.io.IOUtils;
 import org.aravind.oss.jenkins.domain.Jenkins;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.Base64;
 import java.util.Optional;
 
@@ -82,18 +82,12 @@ public class JenkinsClient {
         try {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             InputStream is = conn.getInputStream();
-
-            // read the response body
-            byte[] buf = new byte[bufferSize];
-
-            while (is.read(buf) > 0) {
-                bos.write(buf);
-            }
+            String resp = IOUtils.toString(is, Charset.forName("UTF-8"));
 
             // close the input stream so that the connection can be reused
             is.close();
 
-            return Optional.of(bos.toString());
+            return Optional.of(resp);
         } catch (IOException e) {
             logger.warn("IGNORING this exception. Just a WARNING to debug this issue. Error while HTTP GET to {}", resourceUrl, e);
             //Need to read even the error stream so that we can take advantage of socket reuse in Keep-Alive
@@ -104,13 +98,9 @@ public class JenkinsClient {
                 InputStream es = ((HttpURLConnection) conn).getErrorStream();
 
                 if (es != null) {
-                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
-
                     // read the error response body so that the connection can be reused
-                    byte[] buf = new byte[bufferSize];
-                    while (es.read(buf) > 0) {
-                        bos.write(buf);
-                    }
+                    String resp = IOUtils.toString(es, Charset.forName("UTF-8"));
+
                     // close the error stream so that the connection can be reused
                     es.close();
                 }
