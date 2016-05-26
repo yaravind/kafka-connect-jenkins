@@ -28,6 +28,17 @@ class JenkinsSourceConnectorTest extends Specification {
     def cleanup() {
         if (connector != null) connector.stop()
     }
+
+    //API Contracts
+
+    def "taskClass()"() {
+        when:
+        Class taskClass = connector.taskClass()
+
+        then:
+        taskClass == JenkinsSourceTask.class
+    }
+
     //Error scenarios
 
     def "Config - Wrong jenkins url should throw exception"() {

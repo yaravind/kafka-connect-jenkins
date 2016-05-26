@@ -56,7 +56,7 @@ public class JenkinsSourceConnector extends SourceConnector {
 
     @Override
     public Class<? extends Task> taskClass() {
-        return null;
+        return JenkinsSourceTask.class;
     }
 
     /**
