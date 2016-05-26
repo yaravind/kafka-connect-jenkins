@@ -63,7 +63,7 @@ public class JenkinsSourceTask extends SourceTask {
             if (client != null) {
                 List<SourceRecord> records = null;
                 try {
-                    Optional<String> resp = client.get(512);
+                    Optional<String> resp = client.get();
                     if (resp.isPresent()) {
                         //build SourceRecords
                         try {
