@@ -40,6 +40,7 @@ public class JenkinsSourceConnector extends SourceConnector {
      */
     @Override
     public void start(Map<String, String> props) {
+        logger.debug("Starting the Connector");
         jenkinsCfg = new JenkinsSourceConfig(props);
 
         //Initialize connection to Jenkins instance
@@ -67,6 +68,7 @@ public class JenkinsSourceConnector extends SourceConnector {
      */
     @Override
     public List<Map<String, String>> taskConfigs(int maxTasks) {
+        logger.debug("Calculating taskConfigs");
         Optional<Jenkins> resp = null;
         try {
             resp = client.getJenkins();
@@ -106,6 +108,7 @@ public class JenkinsSourceConnector extends SourceConnector {
 
     @Override
     public void stop() {
+        logger.debug("Stopping the Connector");
         //Not used at this moment
     }
 

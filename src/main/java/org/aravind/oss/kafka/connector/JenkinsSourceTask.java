@@ -37,6 +37,7 @@ public class JenkinsSourceTask extends SourceTask {
 
     @Override
     public void start(Map<String, String> props) {
+        logger.debug("Starting the Task");
         taskProps = props;
         stop = new AtomicBoolean(false);
     }
@@ -95,6 +96,7 @@ public class JenkinsSourceTask extends SourceTask {
 
     @Override
     public synchronized void stop() {
+        logger.debug("Stopping the Task");
         if (stop != null) stop.set(true);
     }
 

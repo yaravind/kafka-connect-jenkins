@@ -76,11 +76,11 @@ public class JenkinsClient {
         return Base64.getEncoder().encodeToString(authString.getBytes());
     }
 
-    public Optional<String> get(int bufferSize) throws JenkinsException {
+    public Optional<String> get() throws JenkinsException {
+        logger.debug("GET to {}", resourceUrl);
         HttpURLConnection conn = connect();
 
         try {
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
             InputStream is = conn.getInputStream();
             String resp = IOUtils.toString(is, Charset.forName("UTF-8"));
 
@@ -112,7 +112,7 @@ public class JenkinsClient {
     }
 
     public Optional<Jenkins> getJenkins() throws JenkinsException {
-        Optional<String> resp = get(512);
+        Optional<String> resp = get();
 
         if (resp.isPresent()) {
             try {
