@@ -1,0 +1,18 @@
+[
+  {
+    "request": {
+      "uri": "/api/json",
+      "headers": {
+        "Authorization": "Basic dXNlcjpwYXNzd29yZA=="
+      }
+    },
+    "response": {
+      "status": 200,
+      "file": "src/test/resources/all-jobs.json",
+      "headers": {
+        "Content-Type": "application/json;charset=UTF-8",
+        "X-Jenkins": "1.642.2"
+      }
+    }
+  }
+]

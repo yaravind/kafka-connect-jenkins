@@ -58,11 +58,11 @@ public class JenkinsClient {
             conn = (HttpURLConnection) resourceUrl.openConnection();
             conn.setConnectTimeout(CONN_TIMEOUT_IN_MILLIS);
             conn.setReadTimeout(SO_TIMEOUT_IN_MILLIS);
-            conn.connect();
-
             if (userName.isPresent()) {
                 conn.setRequestProperty("Authorization", "Basic " + getAuthenticationString());
             }
+
+            conn.connect();
 
             return conn;
         } catch (IOException e) {
