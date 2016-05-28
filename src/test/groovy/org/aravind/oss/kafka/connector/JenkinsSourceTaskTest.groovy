@@ -51,7 +51,7 @@ class JenkinsSourceTaskTest extends Specification {
 
         then:
         sourceRecords != null
-        sourceRecords.size() == 3
+        sourceRecords.size() == 1
     }
 
     def "Should support multiple comma separated job urls as taskProps"() {
@@ -64,7 +64,7 @@ class JenkinsSourceTaskTest extends Specification {
 
         then:
         sourceRecords != null
-        sourceRecords.size() == 3
+        sourceRecords.size() == 1
     }
 
     @Ignore

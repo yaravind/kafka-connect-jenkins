@@ -14,3 +14,4 @@ hs_err_pid*
 # IntelliJ IDEA
 .idea
 *.iml
+/connect-jenkins-source-local.properties

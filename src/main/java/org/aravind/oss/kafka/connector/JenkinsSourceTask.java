@@ -25,10 +25,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class JenkinsSourceTask extends SourceTask {
     public static final String JOB_URLS = "job.urls";
+    public static final String JOB_NAME = "jobName";
+    public static final String BUILD_NUMBER = "buildNumber";
+    private static final Logger logger = LoggerFactory.getLogger(JenkinsSourceTask.class);
+
     private Map<String, String> taskProps;
     private ObjectMapper mapper = new ObjectMapper();
     private AtomicBoolean stop;
-    private static final Logger logger = LoggerFactory.getLogger(JenkinsSourceTask.class);
+    private Map<Map<String, String>, Map<String, Long>> offsets;
 
     @Override
     public String version() {
@@ -48,6 +52,7 @@ public class JenkinsSourceTask extends SourceTask {
         //TODO use RxJava for this in future
         while (!stop.get()) {
             String jobUrls = taskProps.get(JOB_URLS);
+            List<SourceRecord> records = new ArrayList<>();
 
             //handle single job until we get this right
             String jobUrl = jobUrls.split(",")[0];
@@ -61,7 +66,6 @@ public class JenkinsSourceTask extends SourceTask {
             }
 
             if (client != null) {
-                List<SourceRecord> records = null;
                 try {
                     Optional<String> resp = client.get();
                     if (resp.isPresent()) {
@@ -69,13 +73,12 @@ public class JenkinsSourceTask extends SourceTask {
                         try {
                             BuildCollection builds = mapper.readValue(resp.get(), BuildCollection.class);
                             logger.debug("Builds are: ", builds);
-                            Map sourcePartition = Collections.singletonMap("jobName", builds.getName());
-                            records = new ArrayList<>(builds.getBuilds().size());
-                            for (Build build : builds.getBuilds()) {
-                                Map sourceOffset = Collections.singletonMap("buildNumber", build.getNumber());
-                                SourceRecord record = new SourceRecord(sourcePartition, sourceOffset, taskProps.get(JenkinsSourceConfig.TOPIC_CONFIG), Schema.STRING_SCHEMA, resp.get());
-                                records.add(record);
-                            }
+                            Map<String, String> sourcePartition = Collections.singletonMap(JOB_NAME, builds.getName());
+
+                            Build build = builds.getLastBuild();
+                            Map<String, Long> sourceOffset = Collections.singletonMap(BUILD_NUMBER, build.getNumber());
+                            SourceRecord record = new SourceRecord(sourcePartition, sourceOffset, taskProps.get(JenkinsSourceConfig.TOPIC_CONFIG), Schema.STRING_SCHEMA, resp.get());
+                            records.add(record);
                         } catch (IOException e) {
                             logger.error("Error while parsing the Build JSON {} for {}", resp.get(), jobUrl + "api/json", e);
                         }
@@ -103,5 +106,14 @@ public class JenkinsSourceTask extends SourceTask {
     @Override
     public void initialize(SourceTaskContext context) {
         super.initialize(context);
+    }
+
+
+    public boolean containsPartition(String partitionValue) {
+        return offsets.keySet().contains(Collections.singletonMap(JOB_NAME, partitionValue));
+    }
+
+    public Optional<Map<String, Long>> getOffset(String partitionValue) {
+        return Optional.ofNullable(offsets.get(Collections.singletonMap(JOB_NAME, partitionValue)));
     }
 }

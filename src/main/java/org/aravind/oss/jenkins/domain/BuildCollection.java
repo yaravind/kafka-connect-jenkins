@@ -12,6 +12,7 @@ import java.util.List;
 public class BuildCollection {
     private String name;
     private List<Build> builds;
+    private Build lastBuild;
 
     public String getName() {
         return name;
@@ -29,12 +30,20 @@ public class BuildCollection {
         this.builds = builds;
     }
 
+    public Build getLastBuild() {
+        return lastBuild;
+    }
+
+    public void setLastBuild(Build lastBuild) {
+        this.lastBuild = lastBuild;
+    }
 
     @Override
     public String toString() {
         return "BuildCollection{" +
                 "name='" + name + '\'' +
                 ", builds=" + builds +
+                ", lastBuild=" + lastBuild +
                 '}';
     }
 }
