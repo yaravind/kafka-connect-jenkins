@@ -99,7 +99,7 @@ public class JenkinsClient {
 
                 if (es != null) {
                     // read the error response body so that the connection can be reused
-                    String resp = IOUtils.toString(es, Charset.forName("UTF-8"));
+                    IOUtils.toString(es, Charset.forName("UTF-8"));
 
                     // close the error stream so that the connection can be reused
                     es.close();

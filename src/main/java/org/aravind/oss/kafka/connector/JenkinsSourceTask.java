@@ -9,7 +9,6 @@ import org.aravind.oss.jenkins.JenkinsClient;
 import org.aravind.oss.jenkins.JenkinsException;
 import org.aravind.oss.jenkins.domain.Build;
 import org.aravind.oss.jenkins.domain.BuildCollection;
-import org.aravind.oss.jenkins.domain.Jenkins;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
