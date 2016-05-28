@@ -12,26 +12,26 @@
   "displayName": "Abdera-trunk",
   "displayNameOrNull": null,
   "name": "Abdera-trunk",
-  "url": "https://builds.apache.org/job/Abdera-trunk/",
+  "url": "http://localhost:8181/job/Abdera-trunk/",
   "buildable": true,
   "builds": [
     {
       "number": 2546,
-      "url": "https://builds.apache.org/job/Abdera-trunk/2546/"
+      "url": "http://localhost:8181/job/Abdera-trunk/2546/"
     },
     {
       "number": 2545,
-      "url": "https://builds.apache.org/job/Abdera-trunk/2545/"
+      "url": "http://localhost:8181/job/Abdera-trunk/2545/"
     },
     {
       "number": 2544,
-      "url": "https://builds.apache.org/job/Abdera-trunk/2544/"
+      "url": "http://localhost:8181/job/Abdera-trunk/2544/"
     }
   ],
   "color": "blue",
   "firstBuild": {
     "number": 2544,
-    "url": "https://builds.apache.org/job/Abdera-trunk/2544/"
+    "url": "http://localhost:8181/job/Abdera-trunk/2544/"
   },
   "healthReport": [
     {
@@ -51,20 +51,20 @@
   "keepDependencies": false,
   "lastBuild": {
     "number": 2546,
-    "url": "https://builds.apache.org/job/Abdera-trunk/2546/"
+    "url": "http://localhost:8181/job/Abdera-trunk/2546/"
   },
   "lastCompletedBuild": {
     "number": 2546,
-    "url": "https://builds.apache.org/job/Abdera-trunk/2546/"
+    "url": "http://localhost:8181/job/Abdera-trunk/2546/"
   },
   "lastFailedBuild": null,
   "lastStableBuild": {
     "number": 2546,
-    "url": "https://builds.apache.org/job/Abdera-trunk/2546/"
+    "url": "http://localhost:8181/job/Abdera-trunk/2546/"
   },
   "lastSuccessfulBuild": {
     "number": 2546,
-    "url": "https://builds.apache.org/job/Abdera-trunk/2546/"
+    "url": "http://localhost:8181/job/Abdera-trunk/2546/"
   },
   "lastUnstableBuild": null,
   "lastUnsuccessfulBuild": null,
@@ -82,169 +82,169 @@
   "modules": [
     {
       "name": "org.apache.abdera:abdera",
-      "url": "https://builds.apache.org/job/Abdera-trunk/org.apache.abdera$abdera/",
+      "url": "http://localhost:8181/job/Abdera-trunk/org.apache.abdera$abdera/",
       "color": "blue",
       "displayName": "Apache Abdera"
     },
     {
       "name": "org.apache.abdera:abdera-adapters-parent",
-      "url": "https://builds.apache.org/job/Abdera-trunk/org.apache.abdera$abdera-adapters-parent/",
+      "url": "http://localhost:8181/job/Abdera-trunk/org.apache.abdera$abdera-adapters-parent/",
       "color": "blue",
       "displayName": "Abdera Adapters"
     },
     {
       "name": "org.apache.abdera:abdera-bundle",
-      "url": "https://builds.apache.org/job/Abdera-trunk/org.apache.abdera$abdera-bundle/",
+      "url": "http://localhost:8181/job/Abdera-trunk/org.apache.abdera$abdera-bundle/",
       "color": "blue",
       "displayName": "Abdera Bundle Jar"
     },
     {
       "name": "org.apache.abdera:abdera-client",
-      "url": "https://builds.apache.org/job/Abdera-trunk/org.apache.abdera$abdera-client/",
+      "url": "http://localhost:8181/job/Abdera-trunk/org.apache.abdera$abdera-client/",
       "color": "blue",
       "displayName": "Abdera Client"
     },
     {
       "name": "org.apache.abdera:abdera-core",
-      "url": "https://builds.apache.org/job/Abdera-trunk/org.apache.abdera$abdera-core/",
+      "url": "http://localhost:8181/job/Abdera-trunk/org.apache.abdera$abdera-core/",
       "color": "blue",
       "displayName": "Abdera Core"
     },
     {
       "name": "org.apache.abdera:abdera-examples",
-      "url": "https://builds.apache.org/job/Abdera-trunk/org.apache.abdera$abdera-examples/",
+      "url": "http://localhost:8181/job/Abdera-trunk/org.apache.abdera$abdera-examples/",
       "color": "blue",
       "displayName": "Abdera Examples"
     },
     {
       "name": "org.apache.abdera:abdera-extensions-features",
-      "url": "https://builds.apache.org/job/Abdera-trunk/org.apache.abdera$abdera-extensions-features/",
+      "url": "http://localhost:8181/job/Abdera-trunk/org.apache.abdera$abdera-extensions-features/",
       "color": "blue",
       "displayName": "Abdera Extensions - Features"
     },
     {
       "name": "org.apache.abdera:abdera-extensions-gdata",
-      "url": "https://builds.apache.org/job/Abdera-trunk/org.apache.abdera$abdera-extensions-gdata/",
+      "url": "http://localhost:8181/job/Abdera-trunk/org.apache.abdera$abdera-extensions-gdata/",
       "color": "blue",
       "displayName": "Abdera Extensions - GData"
     },
     {
       "name": "org.apache.abdera:abdera-extensions-geo",
-      "url": "https://builds.apache.org/job/Abdera-trunk/org.apache.abdera$abdera-extensions-geo/",
+      "url": "http://localhost:8181/job/Abdera-trunk/org.apache.abdera$abdera-extensions-geo/",
       "color": "blue",
       "displayName": "Abdera Extensions - Geo"
     },
     {
       "name": "org.apache.abdera:abdera-extensions-html",
-      "url": "https://builds.apache.org/job/Abdera-trunk/org.apache.abdera$abdera-extensions-html/",
+      "url": "http://localhost:8181/job/Abdera-trunk/org.apache.abdera$abdera-extensions-html/",
       "color": "blue",
       "displayName": "Abdera Extensions - HTML"
     },
     {
       "name": "org.apache.abdera:abdera-extensions-json",
-      "url": "https://builds.apache.org/job/Abdera-trunk/org.apache.abdera$abdera-extensions-json/",
+      "url": "http://localhost:8181/job/Abdera-trunk/org.apache.abdera$abdera-extensions-json/",
       "color": "blue",
       "displayName": "Abdera Extensions - JSON"
     },
     {
       "name": "org.apache.abdera:abdera-extensions-main",
-      "url": "https://builds.apache.org/job/Abdera-trunk/org.apache.abdera$abdera-extensions-main/",
+      "url": "http://localhost:8181/job/Abdera-trunk/org.apache.abdera$abdera-extensions-main/",
       "color": "blue",
       "displayName": "Abdera Extensions - Main"
     },
     {
       "name": "org.apache.abdera:abdera-extensions-media",
-      "url": "https://builds.apache.org/job/Abdera-trunk/org.apache.abdera$abdera-extensions-media/",
+      "url": "http://localhost:8181/job/Abdera-trunk/org.apache.abdera$abdera-extensions-media/",
       "color": "blue",
       "displayName": "Abdera Extensions - Media"
     },
     {
       "name": "org.apache.abdera:abdera-extensions-oauth",
-      "url": "https://builds.apache.org/job/Abdera-trunk/org.apache.abdera$abdera-extensions-oauth/",
+      "url": "http://localhost:8181/job/Abdera-trunk/org.apache.abdera$abdera-extensions-oauth/",
       "color": "blue",
       "displayName": "Abdera Extensions - OAuth"
     },
     {
       "name": "org.apache.abdera:abdera-extensions-opensearch",
-      "url": "https://builds.apache.org/job/Abdera-trunk/org.apache.abdera$abdera-extensions-opensearch/",
+      "url": "http://localhost:8181/job/Abdera-trunk/org.apache.abdera$abdera-extensions-opensearch/",
       "color": "blue",
       "displayName": "Abdera Extensions - OpenSearch"
     },
     {
       "name": "org.apache.abdera:abdera-extensions-parent",
-      "url": "https://builds.apache.org/job/Abdera-trunk/org.apache.abdera$abdera-extensions-parent/",
+      "url": "http://localhost:8181/job/Abdera-trunk/org.apache.abdera$abdera-extensions-parent/",
       "color": "blue",
       "displayName": "Abdera Extensions"
     },
     {
       "name": "org.apache.abdera:abdera-extensions-rss",
-      "url": "https://builds.apache.org/job/Abdera-trunk/org.apache.abdera$abdera-extensions-rss/",
+      "url": "http://localhost:8181/job/Abdera-trunk/org.apache.abdera$abdera-extensions-rss/",
       "color": "blue",
       "displayName": "Abdera Extensions - RSS"
     },
     {
       "name": "org.apache.abdera:abdera-extensions-serializer",
-      "url": "https://builds.apache.org/job/Abdera-trunk/org.apache.abdera$abdera-extensions-serializer/",
+      "url": "http://localhost:8181/job/Abdera-trunk/org.apache.abdera$abdera-extensions-serializer/",
       "color": "blue",
       "displayName": "Abdera Extensions - Serializer"
     },
     {
       "name": "org.apache.abdera:abdera-extensions-sharing",
-      "url": "https://builds.apache.org/job/Abdera-trunk/org.apache.abdera$abdera-extensions-sharing/",
+      "url": "http://localhost:8181/job/Abdera-trunk/org.apache.abdera$abdera-extensions-sharing/",
       "color": "blue",
       "displayName": "Abdera Extensions - Sharing"
     },
     {
       "name": "org.apache.abdera:abdera-extensions-wsse",
-      "url": "https://builds.apache.org/job/Abdera-trunk/org.apache.abdera$abdera-extensions-wsse/",
+      "url": "http://localhost:8181/job/Abdera-trunk/org.apache.abdera$abdera-extensions-wsse/",
       "color": "blue",
       "displayName": "Abdera Extensions - WSSE"
     },
     {
       "name": "org.apache.abdera:abdera-filesystem",
-      "url": "https://builds.apache.org/job/Abdera-trunk/org.apache.abdera$abdera-filesystem/",
+      "url": "http://localhost:8181/job/Abdera-trunk/org.apache.abdera$abdera-filesystem/",
       "color": "blue",
       "displayName": "Abdera Filesystem Adapter"
     },
     {
       "name": "org.apache.abdera:abdera-i18n",
-      "url": "https://builds.apache.org/job/Abdera-trunk/org.apache.abdera$abdera-i18n/",
+      "url": "http://localhost:8181/job/Abdera-trunk/org.apache.abdera$abdera-i18n/",
       "color": "blue",
       "displayName": "I18N Libraries"
     },
     {
       "name": "org.apache.abdera:abdera-jcr",
-      "url": "https://builds.apache.org/job/Abdera-trunk/org.apache.abdera$abdera-jcr/",
+      "url": "http://localhost:8181/job/Abdera-trunk/org.apache.abdera$abdera-jcr/",
       "color": "blue",
       "displayName": "Abdera JCR Adapter"
     },
     {
       "name": "org.apache.abdera:abdera-jdbc",
-      "url": "https://builds.apache.org/job/Abdera-trunk/org.apache.abdera$abdera-jdbc/",
+      "url": "http://localhost:8181/job/Abdera-trunk/org.apache.abdera$abdera-jdbc/",
       "color": "blue",
       "displayName": "Abdera JDBC Adapter"
     },
     {
       "name": "org.apache.abdera:abdera-parser",
-      "url": "https://builds.apache.org/job/Abdera-trunk/org.apache.abdera$abdera-parser/",
+      "url": "http://localhost:8181/job/Abdera-trunk/org.apache.abdera$abdera-parser/",
       "color": "blue",
       "displayName": "Abdera Parser"
     },
     {
       "name": "org.apache.abdera:abdera-security",
-      "url": "https://builds.apache.org/job/Abdera-trunk/org.apache.abdera$abdera-security/",
+      "url": "http://localhost:8181/job/Abdera-trunk/org.apache.abdera$abdera-security/",
       "color": "blue",
       "displayName": "Abdera Security"
     },
     {
       "name": "org.apache.abdera:abdera-server",
-      "url": "https://builds.apache.org/job/Abdera-trunk/org.apache.abdera$abdera-server/",
+      "url": "http://localhost:8181/job/Abdera-trunk/org.apache.abdera$abdera-server/",
       "color": "blue",
       "displayName": "Abdera Server"
     },
     {
       "name": "org.apache.abdera:abdera-spring",
-      "url": "https://builds.apache.org/job/Abdera-trunk/org.apache.abdera$abdera-spring/",
+      "url": "http://localhost:8181/job/Abdera-trunk/org.apache.abdera$abdera-spring/",
       "color": "blue",
       "displayName": "Abdera Spring Integration"
     }

@@ -75,10 +75,18 @@ public class JenkinsSourceTask extends SourceTask {
                             logger.debug("Builds are: ", builds);
                             Map<String, String> sourcePartition = Collections.singletonMap(JOB_NAME, builds.getName());
 
-                            Build build = builds.getLastBuild();
-                            Map<String, Long> sourceOffset = Collections.singletonMap(BUILD_NUMBER, build.getNumber());
-                            SourceRecord record = new SourceRecord(sourcePartition, sourceOffset, taskProps.get(JenkinsSourceConfig.TOPIC_CONFIG), Schema.STRING_SCHEMA, resp.get());
-                            records.add(record);
+                            Build lastBuild = builds.getLastBuild();
+                            Map<String, Long> sourceOffset = Collections.singletonMap(BUILD_NUMBER, lastBuild.getNumber());
+
+                            //get Build details
+                            Optional<String> lastBuildDetails = lastBuild.getDetails();
+                            if (lastBuildDetails.isPresent()) {
+                                //add build details JSON string as the value
+                                SourceRecord record = new SourceRecord(sourcePartition, sourceOffset, taskProps.get(JenkinsSourceConfig.TOPIC_CONFIG), Schema.STRING_SCHEMA, lastBuildDetails.get());
+                                records.add(record);
+                            } else {
+                                logger.warn("Ignoring job details for {}. Not creating SourceRecord.", lastBuild.getBuildDetailsResource());
+                            }
                         } catch (IOException e) {
                             logger.error("Error while parsing the Build JSON {} for {}", resp.get(), jobUrl + "api/json", e);
                         }
