@@ -16,7 +16,6 @@ import static com.github.dreamhead.moco.Moco.uri
 import static com.github.dreamhead.moco.MocoJsonRunner.jsonHttpServer
 import static com.github.dreamhead.moco.Runner.runner
 import static com.github.dreamhead.moco.Moco.pathResource
-import static org.aravind.oss.SSLClasspathTrustStoreLoader.setTrustStore
 
 /**
  * @author Aravind R Yarram
@@ -36,7 +35,6 @@ class JenkinsClientTest extends Specification {
         mock.start()
 
         //trust the self-signed cert.jks
-        //setTrustStore("/cert.jks", "mocohttps")
         System.setProperty("javax.net.ssl.trustStore","src/test/resources/cert.jks")
 
         def httpsServer = httpsServer(9443, HttpsCertificate.certificate(pathResource("cert.jks"), "mocohttps", "mocohttps"))
