@@ -1,0 +1,228 @@
+{
+  "actions": [
+    {},
+    {},
+    {},
+    {},
+    null,
+    {},
+    {},
+    {},
+    {},
+    {}
+  ],
+  "description": "Builds the Accumulo 1.8 branch. Includes findbugs and checkstyle invocation. Publishes binaries, source and javadoc jars.",
+  "displayName": "Accumulo-1.8",
+  "displayNameOrNull": null,
+  "name": "Accumulo-1.8",
+  "url": "http://localhost:8181/job/Accumulo-1.8/",
+  "buildable": true,
+  "builds": [
+    {
+      "number": 18,
+      "url": "http://localhost:8181/job/Accumulo-1.8/18/"
+    },
+    {
+      "number": 17,
+      "url": "http://localhost:8181/job/Accumulo-1.8/17/"
+    },
+    {
+      "number": 16,
+      "url": "http://localhost:8181/job/Accumulo-1.8/16/"
+    },
+    {
+      "number": 15,
+      "url": "http://localhost:8181/job/Accumulo-1.8/15/"
+    },
+    {
+      "number": 14,
+      "url": "http://localhost:8181/job/Accumulo-1.8/14/"
+    }
+  ],
+  "color": "blue",
+  "firstBuild": {
+    "number": 14,
+    "url": "http://localhost:8181/job/Accumulo-1.8/14/"
+  },
+  "healthReport": [
+    {
+      "description": "Build stability: 2 out of the last 5 builds failed.",
+      "iconClassName": "icon-health-40to59",
+      "iconUrl": "health-40to59.png",
+      "score": 60
+    },
+    {
+      "description": "Test Result: 0 tests failing out of a total of 1,507 tests.",
+      "iconClassName": "icon-health-80plus",
+      "iconUrl": "health-80plus.png",
+      "score": 100
+    }
+  ],
+  "inQueue": false,
+  "keepDependencies": false,
+  "lastBuild": {
+    "number": 18,
+    "url": "http://localhost:8181/job/Accumulo-1.8/18/"
+  },
+  "lastCompletedBuild": {
+    "number": 18,
+    "url": "http://localhost:8181/job/Accumulo-1.8/18/"
+  },
+  "lastFailedBuild": {
+    "number": 15,
+    "url": "http://localhost:8181/job/Accumulo-1.8/15/"
+  },
+  "lastStableBuild": {
+    "number": 18,
+    "url": "http://localhost:8181/job/Accumulo-1.8/18/"
+  },
+  "lastSuccessfulBuild": {
+    "number": 18,
+    "url": "http://localhost:8181/job/Accumulo-1.8/18/"
+  },
+  "lastUnstableBuild": null,
+  "lastUnsuccessfulBuild": {
+    "number": 15,
+    "url": "http://localhost:8181/job/Accumulo-1.8/15/"
+  },
+  "nextBuildNumber": 19,
+  "property": [
+    {},
+    {},
+    {},
+    {}
+  ],
+  "queueItem": null,
+  "concurrentBuild": false,
+  "downstreamProjects": [],
+  "scm": {},
+  "upstreamProjects": [],
+  "modules": [
+    {
+      "name": "org.apache.accumulo:accumulo",
+      "url": "http://localhost:8181/job/Accumulo-1.8/org.apache.accumulo$accumulo/",
+      "color": "blue",
+      "displayName": "Apache Accumulo"
+    },
+    {
+      "name": "org.apache.accumulo:accumulo-core",
+      "url": "http://localhost:8181/job/Accumulo-1.8/org.apache.accumulo$accumulo-core/",
+      "color": "blue",
+      "displayName": "Apache Accumulo Core"
+    },
+    {
+      "name": "org.apache.accumulo:accumulo-docs",
+      "url": "http://localhost:8181/job/Accumulo-1.8/org.apache.accumulo$accumulo-docs/",
+      "color": "blue",
+      "displayName": "Apache Accumulo Documentation"
+    },
+    {
+      "name": "org.apache.accumulo:accumulo-examples-simple",
+      "url": "http://localhost:8181/job/Accumulo-1.8/org.apache.accumulo$accumulo-examples-simple/",
+      "color": "blue",
+      "displayName": "Apache Accumulo Simple Examples"
+    },
+    {
+      "name": "org.apache.accumulo:accumulo-fate",
+      "url": "http://localhost:8181/job/Accumulo-1.8/org.apache.accumulo$accumulo-fate/",
+      "color": "blue",
+      "displayName": "Apache Accumulo Fate"
+    },
+    {
+      "name": "org.apache.accumulo:accumulo-gc",
+      "url": "http://localhost:8181/job/Accumulo-1.8/org.apache.accumulo$accumulo-gc/",
+      "color": "blue",
+      "displayName": "Apache Accumulo GC Server"
+    },
+    {
+      "name": "org.apache.accumulo:accumulo-iterator-test-harness",
+      "url": "http://localhost:8181/job/Accumulo-1.8/org.apache.accumulo$accumulo-iterator-test-harness/",
+      "color": "blue",
+      "displayName": "Apache Accumulo Iterator Test Harness"
+    },
+    {
+      "name": "org.apache.accumulo:accumulo-master",
+      "url": "http://localhost:8181/job/Accumulo-1.8/org.apache.accumulo$accumulo-master/",
+      "color": "blue",
+      "displayName": "Apache Accumulo Master Server"
+    },
+    {
+      "name": "org.apache.accumulo:accumulo-maven-plugin",
+      "url": "http://localhost:8181/job/Accumulo-1.8/org.apache.accumulo$accumulo-maven-plugin/",
+      "color": "blue",
+      "displayName": "Apache Accumulo Maven Plugin"
+    },
+    {
+      "name": "org.apache.accumulo:accumulo-minicluster",
+      "url": "http://localhost:8181/job/Accumulo-1.8/org.apache.accumulo$accumulo-minicluster/",
+      "color": "blue",
+      "displayName": "Apache Accumulo MiniCluster"
+    },
+    {
+      "name": "org.apache.accumulo:accumulo-monitor",
+      "url": "http://localhost:8181/job/Accumulo-1.8/org.apache.accumulo$accumulo-monitor/",
+      "color": "blue",
+      "displayName": "Apache Accumulo Monitor Server"
+    },
+    {
+      "name": "org.apache.accumulo:accumulo-native",
+      "url": "http://localhost:8181/job/Accumulo-1.8/org.apache.accumulo$accumulo-native/",
+      "color": "blue",
+      "displayName": "Apache Accumulo Native Libraries"
+    },
+    {
+      "name": "org.apache.accumulo:accumulo-project",
+      "url": "http://localhost:8181/job/Accumulo-1.8/org.apache.accumulo$accumulo-project/",
+      "color": "blue",
+      "displayName": "Apache Accumulo Project"
+    },
+    {
+      "name": "org.apache.accumulo:accumulo-proxy",
+      "url": "http://localhost:8181/job/Accumulo-1.8/org.apache.accumulo$accumulo-proxy/",
+      "color": "blue",
+      "displayName": "Apache Accumulo Proxy"
+    },
+    {
+      "name": "org.apache.accumulo:accumulo-server-base",
+      "url": "http://localhost:8181/job/Accumulo-1.8/org.apache.accumulo$accumulo-server-base/",
+      "color": "blue",
+      "displayName": "Apache Accumulo Server Base"
+    },
+    {
+      "name": "org.apache.accumulo:accumulo-shell",
+      "url": "http://localhost:8181/job/Accumulo-1.8/org.apache.accumulo$accumulo-shell/",
+      "color": "blue",
+      "displayName": "Apache Accumulo Shell"
+    },
+    {
+      "name": "org.apache.accumulo:accumulo-start",
+      "url": "http://localhost:8181/job/Accumulo-1.8/org.apache.accumulo$accumulo-start/",
+      "color": "blue",
+      "displayName": "Apache Accumulo Start"
+    },
+    {
+      "name": "org.apache.accumulo:accumulo-test",
+      "url": "http://localhost:8181/job/Accumulo-1.8/org.apache.accumulo$accumulo-test/",
+      "color": "blue",
+      "displayName": "Apache Accumulo Testing"
+    },
+    {
+      "name": "org.apache.accumulo:accumulo-trace",
+      "url": "http://localhost:8181/job/Accumulo-1.8/org.apache.accumulo$accumulo-trace/",
+      "color": "blue",
+      "displayName": "Apache Accumulo Trace"
+    },
+    {
+      "name": "org.apache.accumulo:accumulo-tracer",
+      "url": "http://localhost:8181/job/Accumulo-1.8/org.apache.accumulo$accumulo-tracer/",
+      "color": "blue",
+      "displayName": "Apache Accumulo Tracer Server"
+    },
+    {
+      "name": "org.apache.accumulo:accumulo-tserver",
+      "url": "http://localhost:8181/job/Accumulo-1.8/org.apache.accumulo$accumulo-tserver/",
+      "color": "blue",
+      "displayName": "Apache Accumulo Tablet Server"
+    }
+  ]
+}

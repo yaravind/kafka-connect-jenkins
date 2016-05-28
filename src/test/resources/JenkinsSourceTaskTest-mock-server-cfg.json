@@ -24,5 +24,31 @@
         "X-Jenkins": "1.642.2"
       }
     }
+  },
+  {
+    "request": {
+      "uri": "/job/Accumulo-1.8/api/json"
+    },
+    "response": {
+      "status": 200,
+      "file": "src/test/resources/accumulo-trunk-builds.json",
+      "headers": {
+        "Content-Type": "application/json;charset=UTF-8",
+        "X-Jenkins": "1.642.2"
+      }
+    }
+  },
+  {
+    "request": {
+      "uri": "/job/Accumulo-1.8/18/api/json"
+    },
+    "response": {
+      "status": 200,
+      "file": "src/test/resources/accumulo-trunk-18-build-details.json",
+      "headers": {
+        "Content-Type": "application/json;charset=UTF-8",
+        "X-Jenkins": "1.642.2"
+      }
+    }
   }
 ]

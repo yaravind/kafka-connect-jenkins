@@ -46,6 +46,60 @@ public class JenkinsSourceTask extends SourceTask {
         stop = new AtomicBoolean(false);
     }
 
+    public Optional<SourceRecord> createSourceRecord(String jobUrl) {
+        JenkinsClient client = null;
+
+        try {
+            client = new JenkinsClient(new URL(jobUrl + "api/json"));
+        } catch (MalformedURLException e) {
+            logger.error("Can't create URL object for {}.", jobUrl, e);
+            //TODO Silently log the error and ignore? What should we do?
+        }
+        Optional<String> resp = Optional.empty();
+        if (client != null) {
+            try {
+                resp = client.get();
+            } catch (JenkinsException e) {
+                logger.error("Can't do a GET to resource {}", jobUrl, e);
+                //TODO Silently log the error and ignore? What should we do?
+            }
+            if (resp.isPresent()) {
+                BuildCollection builds = null;
+
+                //build SourceRecords
+                try {
+                    builds = mapper.readValue(resp.get(), BuildCollection.class);
+                } catch (IOException e) {
+                    logger.error("Error while parsing the Build JSON {} for {}", resp.get(), jobUrl + "api/json", e);
+                }
+
+                logger.debug("Builds are: ", builds);
+
+                if (builds != null) {
+                    Map<String, String> sourcePartition = Collections.singletonMap(JOB_NAME, builds.getName());
+
+                    Build lastBuild = builds.getLastBuild();
+                    Map<String, Long> sourceOffset = Collections.singletonMap(BUILD_NUMBER, lastBuild.getNumber());
+
+                    //get Build details
+                    Optional<String> lastBuildDetails = lastBuild.getDetails();
+                    if (lastBuildDetails.isPresent()) {
+                        //add build details JSON string as the value
+                        SourceRecord record = new SourceRecord(sourcePartition, sourceOffset, taskProps.get(JenkinsSourceConfig.TOPIC_CONFIG), Schema.STRING_SCHEMA, lastBuildDetails.get());
+                        return Optional.of(record);
+                    } else {
+                        logger.warn("Ignoring job details for {}. Not creating SourceRecord.", lastBuild.getBuildDetailsResource());
+                    }
+                }
+            } else {
+                //If no builds were found
+                logger.debug("No builds were found for {}", jobUrl);
+            }
+
+        }
+        return Optional.empty();
+    }
+
     @Override
     public List<SourceRecord> poll() throws InterruptedException {
         //Keep trying in a loop until stop() is called on this instance.
@@ -54,53 +108,13 @@ public class JenkinsSourceTask extends SourceTask {
             String jobUrls = taskProps.get(JOB_URLS);
             List<SourceRecord> records = new ArrayList<>();
 
-            //handle single job until we get this right
-            String jobUrl = jobUrls.split(",")[0];
-            JenkinsClient client = null;
-
-            try {
-                client = new JenkinsClient(new URL(jobUrl + "api/json"));
-            } catch (MalformedURLException e) {
-                logger.error("Can't create URL object for {}", jobUrl, e);
-                //TODO Silently log the error and ignore? What should we do?
+            for (String jobUrl : jobUrls.split(",")) {
+                Optional<SourceRecord> sourceRecord = createSourceRecord(jobUrl);
+                if (sourceRecord.isPresent()) records.add(sourceRecord.get());
             }
-
-            if (client != null) {
-                try {
-                    Optional<String> resp = client.get();
-                    if (resp.isPresent()) {
-                        //build SourceRecords
-                        try {
-                            BuildCollection builds = mapper.readValue(resp.get(), BuildCollection.class);
-                            logger.debug("Builds are: ", builds);
-                            Map<String, String> sourcePartition = Collections.singletonMap(JOB_NAME, builds.getName());
-
-                            Build lastBuild = builds.getLastBuild();
-                            Map<String, Long> sourceOffset = Collections.singletonMap(BUILD_NUMBER, lastBuild.getNumber());
-
-                            //get Build details
-                            Optional<String> lastBuildDetails = lastBuild.getDetails();
-                            if (lastBuildDetails.isPresent()) {
-                                //add build details JSON string as the value
-                                SourceRecord record = new SourceRecord(sourcePartition, sourceOffset, taskProps.get(JenkinsSourceConfig.TOPIC_CONFIG), Schema.STRING_SCHEMA, lastBuildDetails.get());
-                                records.add(record);
-                            } else {
-                                logger.warn("Ignoring job details for {}. Not creating SourceRecord.", lastBuild.getBuildDetailsResource());
-                            }
-                        } catch (IOException e) {
-                            logger.error("Error while parsing the Build JSON {} for {}", resp.get(), jobUrl + "api/json", e);
-                        }
-                    } else {
-                        //If no builds were found
-                        continue;
-                    }
-                    return records;
-                } catch (JenkinsException e) {
-                    logger.error("Can't do a GET to resource {}", jobUrl, e);
-                    //TODO Silently log the error and ignore? What should we do?
-                }
-            }
+            return records;
         }
+
         //null indicates no data
         return null;
     }

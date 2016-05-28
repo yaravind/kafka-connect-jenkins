@@ -1,0 +1,252 @@
+{
+  "actions": [
+    {
+      "causes": [
+        {
+          "shortDescription": "Started by an SCM change"
+        }
+      ]
+    },
+    {},
+    {},
+    {},
+    {
+      "buildsByBranchName": {
+        "origin/1.8": {
+          "buildNumber": 18,
+          "buildResult": null,
+          "marked": {
+            "SHA1": "85ff374f30d1e0ce9351d496b2300d4d6a2c013d",
+            "branch": [
+              {
+                "SHA1": "85ff374f30d1e0ce9351d496b2300d4d6a2c013d",
+                "name": "origin/1.8"
+              }
+            ]
+          },
+          "revision": {
+            "SHA1": "85ff374f30d1e0ce9351d496b2300d4d6a2c013d",
+            "branch": [
+              {
+                "SHA1": "85ff374f30d1e0ce9351d496b2300d4d6a2c013d",
+                "name": "origin/1.8"
+              }
+            ]
+          }
+        }
+      },
+      "lastBuiltRevision": {
+        "SHA1": "85ff374f30d1e0ce9351d496b2300d4d6a2c013d",
+        "branch": [
+          {
+            "SHA1": "85ff374f30d1e0ce9351d496b2300d4d6a2c013d",
+            "name": "origin/1.8"
+          }
+        ]
+      },
+      "remoteUrls": [
+        "git://git.apache.org/accumulo.git"
+      ],
+      "scmName": ""
+    },
+    {},
+    {},
+    {},
+    {
+      "failCount": 0,
+      "skipCount": 7,
+      "totalCount": 1507,
+      "urlName": "testReport"
+    },
+    {},
+    {},
+    {},
+    {}
+  ],
+  "artifacts": [],
+  "building": false,
+  "description": null,
+  "displayName": "#18",
+  "duration": 1845465,
+  "estimatedDuration": 1884518,
+  "executor": null,
+  "fullDisplayName": "Accumulo-1.8 #18",
+  "id": "18",
+  "keepLog": false,
+  "number": 18,
+  "queueId": 34155,
+  "result": "SUCCESS",
+  "timestamp": 1464384308581,
+  "url": "https://builds.apache.org/job/Accumulo-1.8/18/",
+  "builtOn": "ubuntu-2",
+  "changeSet": {
+    "items": [
+      {
+        "affectedPaths": [
+          "test/src/test/java/org/apache/accumulo/fate/zookeeper/ZooLockTest.java",
+          "test/src/test/java/org/apache/accumulo/test/fate/zookeeper/ZooLockTest.java"
+        ],
+        "commitId": "5b971d675c8a395f6bc2924285b094d973e39ebe",
+        "timestamp": 1464375995000,
+        "author": {
+          "absoluteUrl": "https://builds.apache.org/user/ctubbsii",
+          "fullName": "ctubbsii"
+        },
+        "comment": "ACCUMULO-4312 Fix jar sealing problem\nMove ZooLockTest.java to another package so it doesn't conflict with the \npackage in the fate module (needed because the jars are sealed).\n",
+        "date": "2016-05-27 15:06:35 -0400",
+        "id": "5b971d675c8a395f6bc2924285b094d973e39ebe",
+        "msg": "ACCUMULO-4312 Fix jar sealing problem",
+        "paths": [
+          {
+            "editType": "add",
+            "file": "test/src/test/java/org/apache/accumulo/test/fate/zookeeper/ZooLockTest.java"
+          },
+          {
+            "editType": "delete",
+            "file": "test/src/test/java/org/apache/accumulo/fate/zookeeper/ZooLockTest.java"
+          }
+        ]
+      },
+      {
+        "affectedPaths": [
+          "test/src/test/java/org/apache/accumulo/proxy/TestProxyInstanceOperations.java",
+          "server/base/src/main/java/org/apache/accumulo/server/tabletserver/LargestFirstMemoryManager.java",
+          "test/src/test/java/org/apache/accumulo/test/proxy/TestProxyTableOperations.java",
+          "test/src/test/java/org/apache/accumulo/proxy/TestProxySecurityOperations.java",
+          "test/src/test/java/org/apache/accumulo/test/proxy/TestProxySecurityOperations.java",
+          "test/src/test/java/org/apache/accumulo/proxy/TJsonProtocolProxyIT.java",
+          "test/src/test/java/org/apache/accumulo/test/proxy/TBinaryProxyIT.java",
+          "server/tserver/src/test/java/org/apache/accumulo/tserver/LargestFirstMemoryManagerTest.java",
+          "test/src/test/java/org/apache/accumulo/proxy/TestProxyTableOperations.java",
+          "test/src/test/java/org/apache/accumulo/proxy/TTupleProxyIT.java",
+          "test/src/test/java/org/apache/accumulo/test/proxy/TCompactProxyIT.java",
+          "test/src/test/java/org/apache/accumulo/test/proxy/TestProxyReadWrite.java",
+          "test/src/test/java/org/apache/accumulo/proxy/TBinaryProxyIT.java",
+          "test/src/test/java/org/apache/accumulo/test/proxy/TTupleProxyIT.java",
+          "test/src/test/java/org/apache/accumulo/proxy/SimpleProxyBase.java",
+          "test/src/test/java/org/apache/accumulo/test/proxy/ProxyDurabilityIT.java",
+          "server/tserver/src/test/java/org/apache/accumulo/server/tabletserver/LargestFirstMemoryManagerTest.java",
+          "test/src/test/java/org/apache/accumulo/test/proxy/TestProxyInstanceOperations.java",
+          "test/src/test/java/org/apache/accumulo/test/proxy/SimpleProxyBase.java",
+          "test/src/test/java/org/apache/accumulo/test/proxy/TJsonProtocolProxyIT.java",
+          "test/src/test/java/org/apache/accumulo/proxy/TestProxyReadWrite.java",
+          "test/src/test/java/org/apache/accumulo/proxy/TCompactProxyIT.java",
+          "test/src/test/java/org/apache/accumulo/proxy/ProxyDurabilityIT.java"
+        ],
+        "commitId": "d10840b8e5177f1f026f28705f93943a1921ad82",
+        "timestamp": 1464379175000,
+        "author": {
+          "absoluteUrl": "https://builds.apache.org/user/ctubbsii",
+          "fullName": "ctubbsii"
+        },
+        "comment": "ACCUMULO-4312 Fix additional sealing problems in 1.7 branch\n",
+        "date": "2016-05-27 15:59:35 -0400",
+        "id": "d10840b8e5177f1f026f28705f93943a1921ad82",
+        "msg": "ACCUMULO-4312 Fix additional sealing problems in 1.7 branch",
+        "paths": [
+          {
+            "editType": "add",
+            "file": "test/src/test/java/org/apache/accumulo/test/proxy/TestProxyInstanceOperations.java"
+          },
+          {
+            "editType": "delete",
+            "file": "test/src/test/java/org/apache/accumulo/proxy/TBinaryProxyIT.java"
+          },
+          {
+            "editType": "delete",
+            "file": "test/src/test/java/org/apache/accumulo/proxy/TCompactProxyIT.java"
+          },
+          {
+            "editType": "edit",
+            "file": "server/base/src/main/java/org/apache/accumulo/server/tabletserver/LargestFirstMemoryManager.java"
+          },
+          {
+            "editType": "delete",
+            "file": "server/tserver/src/test/java/org/apache/accumulo/server/tabletserver/LargestFirstMemoryManagerTest.java"
+          },
+          {
+            "editType": "delete",
+            "file": "test/src/test/java/org/apache/accumulo/proxy/SimpleProxyBase.java"
+          },
+          {
+            "editType": "delete",
+            "file": "test/src/test/java/org/apache/accumulo/proxy/TestProxyTableOperations.java"
+          },
+          {
+            "editType": "add",
+            "file": "test/src/test/java/org/apache/accumulo/test/proxy/TBinaryProxyIT.java"
+          },
+          {
+            "editType": "add",
+            "file": "test/src/test/java/org/apache/accumulo/test/proxy/TTupleProxyIT.java"
+          },
+          {
+            "editType": "delete",
+            "file": "test/src/test/java/org/apache/accumulo/proxy/TestProxyInstanceOperations.java"
+          },
+          {
+            "editType": "add",
+            "file": "test/src/test/java/org/apache/accumulo/test/proxy/TestProxyTableOperations.java"
+          },
+          {
+            "editType": "add",
+            "file": "test/src/test/java/org/apache/accumulo/test/proxy/TestProxySecurityOperations.java"
+          },
+          {
+            "editType": "delete",
+            "file": "test/src/test/java/org/apache/accumulo/proxy/TTupleProxyIT.java"
+          },
+          {
+            "editType": "add",
+            "file": "test/src/test/java/org/apache/accumulo/test/proxy/TCompactProxyIT.java"
+          },
+          {
+            "editType": "add",
+            "file": "test/src/test/java/org/apache/accumulo/test/proxy/TestProxyReadWrite.java"
+          },
+          {
+            "editType": "delete",
+            "file": "test/src/test/java/org/apache/accumulo/proxy/TestProxyReadWrite.java"
+          },
+          {
+            "editType": "add",
+            "file": "test/src/test/java/org/apache/accumulo/test/proxy/ProxyDurabilityIT.java"
+          },
+          {
+            "editType": "delete",
+            "file": "test/src/test/java/org/apache/accumulo/proxy/TJsonProtocolProxyIT.java"
+          },
+          {
+            "editType": "delete",
+            "file": "test/src/test/java/org/apache/accumulo/proxy/TestProxySecurityOperations.java"
+          },
+          {
+            "editType": "add",
+            "file": "server/tserver/src/test/java/org/apache/accumulo/tserver/LargestFirstMemoryManagerTest.java"
+          },
+          {
+            "editType": "add",
+            "file": "test/src/test/java/org/apache/accumulo/test/proxy/SimpleProxyBase.java"
+          },
+          {
+            "editType": "add",
+            "file": "test/src/test/java/org/apache/accumulo/test/proxy/TJsonProtocolProxyIT.java"
+          },
+          {
+            "editType": "delete",
+            "file": "test/src/test/java/org/apache/accumulo/proxy/ProxyDurabilityIT.java"
+          }
+        ]
+      }
+    ],
+    "kind": "git"
+  },
+  "culprits": [
+    {
+      "absoluteUrl": "https://builds.apache.org/user/ctubbsii",
+      "fullName": "ctubbsii"
+    }
+  ],
+  "mavenArtifacts": {},
+  "mavenVersionUsed": "3.3.3"
+}

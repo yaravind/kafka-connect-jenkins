@@ -56,7 +56,7 @@ class JenkinsSourceTaskTest extends Specification {
 
     def "Should support multiple comma separated job urls as taskProps"() {
         given:
-        def taskProps = ['job.urls': 'http://localhost:8181/job/Abdera-trunk/,https://builds.apache.org/job/Accumulo-1.8/']
+        def taskProps = ['job.urls': 'http://localhost:8181/job/Abdera-trunk/,http://localhost:8181/job/Accumulo-1.8/']
         sourceTask.start(taskProps)
 
         when:
@@ -64,7 +64,7 @@ class JenkinsSourceTaskTest extends Specification {
 
         then:
         sourceRecords != null
-        sourceRecords.size() == 1
+        sourceRecords.size() == 2
     }
 
     @Ignore
