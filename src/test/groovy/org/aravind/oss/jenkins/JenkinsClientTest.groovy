@@ -30,6 +30,20 @@ class JenkinsClientTest extends Specification {
     @Shared
     Runner httpsMock
 
+    def setupSpec() {
+        def server = jsonHttpServer(9191, pathResource("jenkins-mock-server-cfg.json"))
+        mock = runner(server)
+        mock.start()
+
+        //trust the self-signed cert.jks
+        //setTrustStore("/cert.jks", "mocohttps")
+        System.setProperty("javax.net.ssl.trustStore","src/test/resources/cert.jks")
+
+        def httpsServer = httpsServer(9443, HttpsCertificate.certificate(pathResource("cert.jks"), "mocohttps", "mocohttps"))
+        httpsMock = runner(httpsServer)
+        httpsMock.start()
+    }
+
     //Error scenarios
 
     def "Wrong authentication credentials 'username' should return empty response"() {
@@ -75,19 +89,6 @@ class JenkinsClientTest extends Specification {
     }
 
     //Happy scenarios
-
-    def setupSpec() {
-        def server = jsonHttpServer(9191, pathResource("jenkins-mock-server-cfg.json"))
-        mock = runner(server)
-        mock.start()
-
-        //trust the self-signed cert.jks
-        setTrustStore("/cert.jks", "mocohttps")
-
-        def httpsServer = httpsServer(9443, HttpsCertificate.certificate(pathResource("cert.jks"), "mocohttps", "mocohttps"))
-        httpsMock = runner(httpsServer)
-        httpsMock.start()
-    }
 
     def "Supports Jenkins without authentication"() {
         when:
