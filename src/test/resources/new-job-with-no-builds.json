@@ -1,0 +1,32 @@
+{
+  "actions": [
+    {},
+    {}
+  ],
+  "description": "",
+  "displayName": "archetype",
+  "displayNameOrNull": null,
+  "name": "archetype",
+  "url": "http://localhost:8181/jenkins/job/New-Job/",
+  "buildable": true,
+  "builds": [],
+  "color": "notbuilt",
+  "firstBuild": null,
+  "healthReport": [],
+  "inQueue": false,
+  "keepDependencies": false,
+  "lastBuild": null,
+  "lastCompletedBuild": null,
+  "lastFailedBuild": null,
+  "lastStableBuild": null,
+  "lastSuccessfulBuild": null,
+  "lastUnstableBuild": null,
+  "lastUnsuccessfulBuild": null,
+  "nextBuildNumber": 24,
+  "property": [],
+  "queueItem": null,
+  "concurrentBuild": false,
+  "downstreamProjects": [],
+  "scm": {},
+  "upstreamProjects": []
+}

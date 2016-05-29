@@ -67,10 +67,10 @@ class JenkinsSourceTaskTest extends Specification {
         sourceRecords.size() == 2
     }
 
-    @Ignore
     //Negative tests
+
     def "Wrong URL should continue without any errors"() {
-        given:
+        given: "A wrong job url"
         def taskProps = ['job.urls': 'http://wrong.host.name:8181/job/Abdera-trunk/']
         sourceTask.start(taskProps)
 
@@ -78,7 +78,20 @@ class JenkinsSourceTaskTest extends Specification {
         def sourceRecords = sourceTask.poll()
         sourceTask.stop()
 
-        then:
+        then: "Exception is logged and ignored and Source records will be null"
+        sourceRecords != null
+    }
+
+    def "A Job without any builds (May be just created) should continue without any errors"() {
+        given: "A job with no lastBuild"
+        def taskProps = ['job.urls': 'http://localhost:8181/job/New-Job/']
+        sourceTask.start(taskProps)
+
+        when:
+        def sourceRecords = sourceTask.poll()
+        sourceTask.stop()
+
+        then: "Exception is logged and ignored and Source records will be null"
         sourceRecords != null
     }
 }

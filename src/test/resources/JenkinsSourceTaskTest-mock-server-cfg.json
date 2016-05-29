@@ -50,5 +50,18 @@
         "X-Jenkins": "1.642.2"
       }
     }
+  },
+  {
+    "request": {
+      "uri": "/job/New-Job/api/json"
+    },
+    "response": {
+      "status": 200,
+      "file": "src/test/resources/new-job-with-no-builds.json",
+      "headers": {
+        "Content-Type": "application/json;charset=UTF-8",
+        "X-Jenkins": "1.642.2"
+      }
+    }
   }
 ]
