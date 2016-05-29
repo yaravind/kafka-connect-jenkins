@@ -83,6 +83,7 @@ public class JenkinsSourceConnector extends SourceConnector {
             //Create job groups
             int jobsCount = jenkins.getJobs().size();
             int numGroups = Math.min(jobsCount, maxTasks);
+            logger.debug("Total jobs: {}. maxTasks: {}. Number of taskGroups created: {}.", jobsCount, maxTasks, numGroups);
             List<List<Job>> jobGroups = ConnectorUtils.groupPartitions(jenkins.getJobs(), numGroups);
 
             //Create task configs for each group
@@ -98,7 +99,7 @@ public class JenkinsSourceConnector extends SourceConnector {
                         .collect(Collectors.joining(","));
 
                 taskProps.put(JenkinsSourceTask.JOB_URLS, commaSeparatedJobUrls);
-
+                logger.debug("taskProps: {}", taskProps);
                 taskConfigs.add(taskProps);
             }
             return taskConfigs;

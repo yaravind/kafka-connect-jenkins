@@ -57,12 +57,14 @@ public class JenkinsSourceTask extends SourceTask {
         Optional<String> resp = Optional.empty();
         if (client != null) {
             try {
+                logger.debug("GET " + jobUrl + "api/json");
                 resp = client.get();
             } catch (JenkinsException e) {
                 logger.error("Can't do a GET to resource {}", jobUrl, e);
                 //TODO Silently log the error and ignore? What should we do?
             }
             if (resp.isPresent()) {
+                logger.debug("Resp: {}", resp.get());
                 BuildCollection builds = null;
 
                 //build SourceRecords
@@ -72,22 +74,26 @@ public class JenkinsSourceTask extends SourceTask {
                     logger.error("Error while parsing the Build JSON {} for {}", resp.get(), jobUrl + "api/json", e);
                 }
 
-                logger.debug("Builds are: ", builds);
+                logger.debug("Builds are: {}", builds);
 
                 if (builds != null) {
                     Map<String, String> sourcePartition = Collections.singletonMap(JOB_NAME, builds.getName());
 
                     Build lastBuild = builds.getLastBuild();
-                    Map<String, Long> sourceOffset = Collections.singletonMap(BUILD_NUMBER, lastBuild.getNumber());
 
-                    //get Build details
-                    Optional<String> lastBuildDetails = lastBuild.getDetails();
-                    if (lastBuildDetails.isPresent()) {
-                        //add build details JSON string as the value
-                        SourceRecord record = new SourceRecord(sourcePartition, sourceOffset, taskProps.get(JenkinsSourceConfig.TOPIC_CONFIG), Schema.STRING_SCHEMA, lastBuildDetails.get());
-                        return Optional.of(record);
-                    } else {
-                        logger.warn("Ignoring job details for {}. Not creating SourceRecord.", lastBuild.getBuildDetailsResource());
+                    //Some jobs might not have any builds. TODO need to figure out how to represent these
+                    if (lastBuild != null) {
+                        Map<String, Long> sourceOffset = Collections.singletonMap(BUILD_NUMBER, lastBuild.getNumber());
+
+                        //get Build details
+                        Optional<String> lastBuildDetails = lastBuild.getDetails();
+                        if (lastBuildDetails.isPresent()) {
+                            //add build details JSON string as the value
+                            SourceRecord record = new SourceRecord(sourcePartition, sourceOffset, taskProps.get(JenkinsSourceConfig.TOPIC_CONFIG), Schema.STRING_SCHEMA, lastBuildDetails.get());
+                            return Optional.of(record);
+                        } else {
+                            logger.warn("Ignoring job details for {}. Not creating SourceRecord.", lastBuild.getBuildDetailsResource());
+                        }
                     }
                 }
             } else {
@@ -114,7 +120,7 @@ public class JenkinsSourceTask extends SourceTask {
             return records;
         }
 
-        //null indicates no data
+        //Only in case of shutdown. null indicates no data
         return null;
     }
 

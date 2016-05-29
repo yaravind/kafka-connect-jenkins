@@ -41,6 +41,7 @@ public class Build extends JenkinsItem {
     }
 
     public Optional<String> getDetails() {
+        logger.debug("GET build details for {}", getBuildDetailsResource());
         try {
             setClient(new JenkinsClient(new URL(getBuildDetailsResource())));
             return getClient().get();
