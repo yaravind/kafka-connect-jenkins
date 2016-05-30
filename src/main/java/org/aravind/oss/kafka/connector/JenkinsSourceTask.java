@@ -31,7 +31,7 @@ public class JenkinsSourceTask extends SourceTask {
     private Map<String, String> taskProps;
     private ObjectMapper mapper = new ObjectMapper();
     private AtomicBoolean stop;
-    private Map<Map<String, String>, Map<String, Long>> offsets;
+    private Map<Map<String, String>, Map<String, Object>> offsets;
 
     @Override
     public String version() {
@@ -92,7 +92,7 @@ public class JenkinsSourceTask extends SourceTask {
                             SourceRecord record = new SourceRecord(sourcePartition, sourceOffset, taskProps.get(JenkinsSourceConfig.TOPIC_CONFIG), Schema.STRING_SCHEMA, lastBuildDetails.get());
                             return Optional.of(record);
                         } else {
-                            logger.warn("Ignoring job details for {}. Not creating SourceRecord.", lastBuild.getBuildDetailsResource());
+                            logger.debug("Ignoring job details for {} as there are no builds for this Job. Not creating SourceRecord.", lastBuild.getBuildDetailsResource());
                         }
                     }
                 }
@@ -111,9 +111,18 @@ public class JenkinsSourceTask extends SourceTask {
         //TODO use RxJava for this in future
         while (!stop.get()) {
             String jobUrls = taskProps.get(JOB_URLS);
-            List<SourceRecord> records = new ArrayList<>();
+            String[] jobUrlArray = jobUrls.split(",");
 
-            for (String jobUrl : jobUrls.split(",")) {
+            logger.debug("Loading offsets");
+            Collection<Map<String, String>> partitions = new ArrayList<>(jobUrlArray.length);
+            for (String jobUrl : jobUrlArray) {
+                partitions.add(Collections.singletonMap(JOB_NAME, extractJobName(jobUrl)));
+            }
+            offsets = context.offsetStorageReader().offsets(partitions);
+            logger.debug("Offsets: {}", offsets);
+
+            List<SourceRecord> records = new ArrayList<>();
+            for (String jobUrl : jobUrlArray) {
                 Optional<SourceRecord> sourceRecord = createSourceRecord(jobUrl);
                 if (sourceRecord.isPresent()) records.add(sourceRecord.get());
             }
@@ -122,6 +131,13 @@ public class JenkinsSourceTask extends SourceTask {
 
         //Only in case of shutdown. null indicates no data
         return null;
+    }
+
+    private String extractJobName(String jobUrl) {
+        //For input - https://builds.apache.org/job/Accumulo-Master/
+        //This method should return - Accumulo-Master
+        String[] tokens = jobUrl.split("/");
+        return tokens[tokens.length - 1];
     }
 
     @Override
@@ -140,7 +156,7 @@ public class JenkinsSourceTask extends SourceTask {
         return offsets.keySet().contains(Collections.singletonMap(JOB_NAME, partitionValue));
     }
 
-    public Optional<Map<String, Long>> getOffset(String partitionValue) {
+    public Optional<Map<String, Object>> getOffset(String partitionValue) {
         return Optional.ofNullable(offsets.get(Collections.singletonMap(JOB_NAME, partitionValue)));
     }
 }

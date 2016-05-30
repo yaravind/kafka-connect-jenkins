@@ -1,6 +1,7 @@
 package org.aravind.oss.kafka.connector
 
 import org.apache.kafka.connect.source.SourceTaskContext
+import org.apache.kafka.connect.storage.OffsetStorageReader
 import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Specification
@@ -18,11 +19,17 @@ class JenkinsSourceTaskTest extends Specification {
     SourceTaskContext taskContext = Mock()
 
     @Shared
+    OffsetStorageReader storageReader = Mock()
+
+    @Shared
     def mock
 
     JenkinsSourceTask sourceTask
 
     def setupSpec() {
+        storageReader.offsets(_) >> [:]
+        taskContext.offsetStorageReader() >> storageReader
+
         def server = jsonHttpServer(8181, pathResource("JenkinsSourceTaskTest-mock-server-cfg.json"))
         mock = runner(server)
         mock.start()
