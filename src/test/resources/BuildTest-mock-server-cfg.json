@@ -1,0 +1,28 @@
+[
+  {
+    "request": {
+      "uri": "/job/Abdera-trunk/api/json"
+    },
+    "response": {
+      "status": 200,
+      "file": "src/test/resources/abdera-trunk-builds.json",
+      "headers": {
+        "Content-Type": "application/json;charset=UTF-8",
+        "X-Jenkins": "1.642.2"
+      }
+    }
+  },
+  {
+    "request": {
+      "uri": "/job/Abdera-trunk/2546/api/json"
+    },
+    "response": {
+      "status": 200,
+      "file": "src/test/resources/abdera-trunk-2546-build-details.json",
+      "headers": {
+        "Content-Type": "application/json;charset=UTF-8",
+        "X-Jenkins": "1.642.2"
+      }
+    }
+  }
+]
