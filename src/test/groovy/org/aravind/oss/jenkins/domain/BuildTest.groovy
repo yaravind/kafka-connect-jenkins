@@ -40,16 +40,16 @@ class BuildTest extends Specification {
     }
 
     def "getDetails - Error condition"() {
-        given:
+        given: "A wrong port number 10"
         def build = new Build()
         build.setNumber(2546)
-        build.setUrl('http://localhost:1081/job/Abdera-trunk/0000/')
+        build.setUrl('http://localhost:10/job/Abdera-trunk/0000/')
 
-        when:
+        when: "Asked for the Build details"
         Optional<String> details = build.getDetails()
 
-        then:
-        build.getBuildDetailsResource() == 'http://localhost:1081/job/Abdera-trunk/0000/api/json'
+        then: "An exception is logged and Optional.empty() is returned"
+        build.getBuildDetailsResource() == 'http://localhost:10/job/Abdera-trunk/0000/api/json'
         details.isPresent() == false
     }
 }
