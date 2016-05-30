@@ -49,6 +49,30 @@ class JenkinsSourceConfigTest extends Specification {
         thrown(ConfigException)
     }
 
+    def "GetJenkinsUrl should throw Exception with invalid URL"() {
+        given: "Given invalid url"
+        def props = ['jenkins.base.url': 'invalid url']
+        def jenkinsCfg = new JenkinsSourceConfig(props)
+
+        when:
+        jenkinsCfg.getJenkinsUrl()
+
+        then:
+        thrown(ConfigException)
+    }
+
+    def "GetJobsResource should throw Exception with invalid URL"() {
+        given: "Given invalid url"
+        def props = ['jenkins.base.url': 'invalid url']
+        def jenkinsCfg = new JenkinsSourceConfig(props)
+
+        when:
+        jenkinsCfg.getJobsResource()
+
+        then:
+        thrown(ConfigException)
+    }
+
     //Happy scenarios
 
     def "'jenkins.base.url' is the only REQUIRED property"() {
