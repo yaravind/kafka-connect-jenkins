@@ -83,14 +83,14 @@ While testing, you might want to run the connector in standalone mode. Follow th
 
 ### Configurations
 
-| Property | Mandatory? | Default value | Description | 
-|----------|------------|---------------|-------------|
-|connector.class|Yes|org.aravind.oss.kafka.connector.JenkinsSourceConnector|Class implementing source connector for Jenkins. |
-|tasks.max|Yes|1| |
-|jenkins.base.url|Yes|None|The URL where jenkins server is running|
-|jenkins.username|No|None|If your Jenkins is secured, you can provide the username with this property|
-|jenkins.password.or.api.token|No|None|If your Jenkins is secured, you can provide the password or api token with this property|
-|topic|Yes|jenkins.connector.topic|Name of the topic where the Build status records are written to. **Make sure you explicitly create this topic using tools provided by Kafka. Do not rely on the default topic creation functionality in PRODUCTION.**|
+| Property | Description | Mandatory? | Default value | 
+|----------|-------------|------------|---------------|
+|connector.class|Class implementing source connector for Jenkins.|Yes|`org.aravind.oss.kafka.connector.JenkinsSourceConnector`|
+|tasks.max| |Yes|1|
+|jenkins.base.url|The URL where jenkins server is running|Yes|None|
+|jenkins.username|If your Jenkins is secured, you can provide the username with this property|No|None|
+|jenkins.password.or.api.token|If your Jenkins is secured, you can provide the password or api token with this property|No|None|
+|topic|Name of the topic where the Build status records are written to. **Make sure you explicitly create this topic using tools provided by Kafka. Do not rely on the default topic creation functionality in PRODUCTION.**|Yes|jenkins.connector.topic|
 
 ## Contribute
 
