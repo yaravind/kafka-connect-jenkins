@@ -45,7 +45,7 @@ public class JenkinsSourceTask extends SourceTask {
         stop = new AtomicBoolean(false);
     }
 
-    public Optional<SourceRecord> createSourceRecord(String jobUrl) {
+    public Optional<SourceRecord> createSourceRecord(String jobUrl, Long lastSavedBuildNumber) {
         JenkinsClient client = null;
 
         try {
@@ -57,14 +57,14 @@ public class JenkinsSourceTask extends SourceTask {
         Optional<String> resp = Optional.empty();
         if (client != null) {
             try {
-                logger.debug("GET " + jobUrl + "api/json");
+                logger.debug("GET job details for {}", jobUrl + "api/json");
                 resp = client.get();
             } catch (JenkinsException e) {
-                logger.error("Can't do a GET to resource {}", jobUrl, e);
+                logger.error("Can't do a GET to resource {}", jobUrl + "api/json", e);
                 //TODO Silently log the error and ignore? What should we do?
             }
             if (resp.isPresent()) {
-                logger.debug("Resp: {}", resp.get());
+                logger.trace("Resp: {}", resp.get());
                 BuildCollection builds = null;
 
                 //build SourceRecords
@@ -74,26 +74,32 @@ public class JenkinsSourceTask extends SourceTask {
                     logger.error("Error while parsing the Build JSON {} for {}", resp.get(), jobUrl + "api/json", e);
                 }
 
-                logger.debug("Builds are: {}", builds);
+                logger.trace("Builds are: {}", builds);
 
                 if (builds != null) {
-                    Map<String, String> sourcePartition = Collections.singletonMap(JOB_NAME, builds.getName());
+                    String partitionValue = builds.getName();
+                    Map<String, String> sourcePartition = Collections.singletonMap(JOB_NAME, partitionValue);
 
                     Build lastBuild = builds.getLastBuild();
 
                     //Some jobs might not have any builds. TODO need to figure out how to represent these
-                    if (lastBuild != null) {
+                    //And the lastBuild might have already been stored
+                    if (lastBuild != null && !lastBuild.getNumber().equals(lastSavedBuildNumber)) {
+                        logger.debug("Partition: {}, lastBuild: {}, lastSavedBuild: {}", partitionValue, lastBuild.getNumber(), lastSavedBuildNumber);
                         Map<String, Long> sourceOffset = Collections.singletonMap(BUILD_NUMBER, lastBuild.getNumber());
 
                         //get Build details
                         Optional<String> lastBuildDetails = lastBuild.getDetails();
                         if (lastBuildDetails.isPresent()) {
                             //add build details JSON string as the value
+                            logger.debug("Create SourceRecord");
                             SourceRecord record = new SourceRecord(sourcePartition, sourceOffset, taskProps.get(JenkinsSourceConfig.TOPIC_CONFIG), Schema.STRING_SCHEMA, lastBuildDetails.get());
                             return Optional.of(record);
                         } else {
                             logger.debug("Ignoring job details for {} as there are no builds for this Job. Not creating SourceRecord.", lastBuild.getBuildDetailsResource());
                         }
+                    } else {
+                        logger.debug("Not creating SourceRecord for {} because either the lastBuild details aren't available or it was already saved earlier", jobUrl + "api/json");
                     }
                 }
             } else {
@@ -119,11 +125,23 @@ public class JenkinsSourceTask extends SourceTask {
                 partitions.add(Collections.singletonMap(JOB_NAME, extractJobName(jobUrl)));
             }
             offsets = context.offsetStorageReader().offsets(partitions);
-            logger.debug("Offsets: {}", offsets);
+            logger.trace("Loaded offsets: {}", offsets);
 
             List<SourceRecord> records = new ArrayList<>();
             for (String jobUrl : jobUrlArray) {
-                Optional<SourceRecord> sourceRecord = createSourceRecord(jobUrl);
+                String partitionValue = extractJobName(jobUrl);
+                logger.debug("Get lastSavedOffset for {} with partitionValue as {}", jobUrl, partitionValue);
+                logger.trace("Contains partition {}? : {}", partitionValue, containsPartition(partitionValue));
+                Optional<Map<String, Object>> offset = getOffset(partitionValue);
+
+                Long lastSavedBuildNumber = null;
+                if (offset.isPresent()) {
+                    logger.debug("lastSavedOffset for {} is {}", partitionValue, offset);
+                    lastSavedBuildNumber = (Long) offset.get().get(BUILD_NUMBER);
+                } else {
+                    logger.debug("lastSavedOffset not available for {}", partitionValue);
+                }
+                Optional<SourceRecord> sourceRecord = createSourceRecord(jobUrl, lastSavedBuildNumber);
                 if (sourceRecord.isPresent()) records.add(sourceRecord.get());
             }
             return records;
