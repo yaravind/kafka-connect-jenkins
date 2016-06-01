@@ -11,7 +11,7 @@ import static com.github.dreamhead.moco.Runner.runner
 
 /**
  * @author Aravind R Yarram
- * @since <<add version>>
+ * @since 0.5.0
  */
 class JenkinsSourceTaskTest extends Specification {
     @Shared
