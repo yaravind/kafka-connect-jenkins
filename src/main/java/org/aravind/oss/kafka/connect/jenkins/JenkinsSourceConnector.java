@@ -1,4 +1,4 @@
-package org.aravind.oss.kafka.connector;
+package org.aravind.oss.kafka.connect.jenkins;
 
 import org.apache.kafka.common.config.ConfigDef;
 import org.apache.kafka.connect.connector.Task;

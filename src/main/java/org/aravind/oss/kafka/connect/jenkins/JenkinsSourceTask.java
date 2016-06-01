@@ -1,4 +1,4 @@
-package org.aravind.oss.kafka.connector;
+package org.aravind.oss.kafka.connect.jenkins;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.connect.data.Schema;

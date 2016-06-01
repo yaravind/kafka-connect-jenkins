@@ -1,4 +1,4 @@
-package org.aravind.oss.kafka.connector;
+package org.aravind.oss.kafka.connect.jenkins;
 
 /**
  * @author Aravind R Yarram

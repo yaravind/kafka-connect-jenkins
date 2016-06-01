@@ -1,4 +1,4 @@
-package org.aravind.oss.kafka.connector
+package org.aravind.oss.kafka.connect.jenkins
 
 import org.apache.kafka.connect.connector.ConnectorContext
 import org.apache.kafka.connect.errors.ConnectException

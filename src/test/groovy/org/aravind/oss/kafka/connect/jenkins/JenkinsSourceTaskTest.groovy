@@ -1,8 +1,7 @@
-package org.aravind.oss.kafka.connector
+package org.aravind.oss.kafka.connect.jenkins
 
 import org.apache.kafka.connect.source.SourceTaskContext
 import org.apache.kafka.connect.storage.OffsetStorageReader
-import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Specification
 
