@@ -47,7 +47,7 @@ While testing, you might want to run the connector in standalone mode. Follow th
 
 | Property | Description | Mandatory? | Default value | 
 |----------|-------------|------------|---------------|
-|connector.class|Class implementing source connector for Jenkins.|Yes|`org.aravind.oss.kafka.connect.jenkins.JenkinsSourceConnector`|
+|connector.class|Class implementing source connector for Jenkins.|Yes|org.aravind.oss.kafka.connect.jenkins.JenkinsSourceConnector|
 |tasks.max| |Yes|1|
 |jenkins.base.url|The URL where jenkins server is running|Yes|None|
 |jenkins.username|If your Jenkins is secured, you can provide the username with this property|No|None|
