@@ -6,7 +6,7 @@ Kafka Connect Connector for Jenkins Open Source Continuous Integration Tool.
 
 ## What is it?
 
-To do
+kafka-connect-jenkins is a [Kafka Connector](http://kafka.apache.org/0100/documentation.html#connect) for loading data from [Jenkins](https://jenkins.io/) Open Source [Continuous Integration](https://en.wikipedia.org/wiki/Continuous_integration) Tool.
 
 ## What can I do with it?
 
