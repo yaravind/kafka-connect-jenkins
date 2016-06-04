@@ -14,10 +14,12 @@ class JenkinsSourceConfigTest extends Specification {
     def Map cfg
 
     def setupSpec() {
-        cfg = ['jenkins.base.url'             : 'https://builds.apache.org',
-               'jenkins.username'             : 'myuser',
-               'jenkins.password.or.api.token': 'mypassword',
-               'jenkins.jobs.resource.path'   : '/api/json']
+        cfg = ['jenkins.base.url'                  : 'https://builds.apache.org',
+               'jenkins.username'                  : 'myuser',
+               'jenkins.password.or.api.token'     : 'mypassword',
+               'jenkins.connection.timeoutInMillis': '1000',
+               'jenkins.read.timeoutInMillis'      : '5000',
+               'jenkins.jobs.resource.path'        : '/api/json']
     }
 
     //Error scenarios
@@ -29,15 +31,6 @@ class JenkinsSourceConfigTest extends Specification {
 
         then:
         thrown(ConfigException)
-    }
-
-    def "Default value of '/api/json' is chosen when 'jenkins.jobs.resource.path' property is not specified"() {
-        when:
-        def props = ['jenkins.base.url': 'https://builds.apache.org']
-        def jenkinsCfg = new JenkinsSourceConfig(props)
-
-        then:
-        jenkinsCfg.getJobsResource() == new URL('https://builds.apache.org/api/json')
     }
 
     def "Not starting the 'jenkins.jobs.resource.path' property value with '/' should throw an exception"() {
@@ -84,6 +77,37 @@ class JenkinsSourceConfigTest extends Specification {
         notThrown(ConfigException)
     }
 
+    //Happy scenarios - Defaults
+
+    def "Defaults - '/api/json' is chosen when 'jenkins.jobs.resource.path' property is not specified"() {
+        when:
+        def props = ['jenkins.base.url': 'https://builds.apache.org']
+        def jenkinsCfg = new JenkinsSourceConfig(props)
+
+        then:
+        jenkinsCfg.getJobsResource() == new URL('https://builds.apache.org/api/json')
+    }
+
+    def "Defaults - '500' millis is chosen when 'jenkins.connection.timeoutInMillis' property is not specified"() {
+        when:
+        def props = ['jenkins.base.url': 'https://builds.apache.org']
+        def jenkinsCfg = new JenkinsSourceConfig(props)
+
+        then:
+        jenkinsCfg.getJenkinsConnTimeout() == 500
+    }
+
+    def "Defaults - '3000' is chosen when 'jenkins.read.timeoutInMillis' property is not specified"() {
+        when:
+        def props = ['jenkins.base.url': 'https://builds.apache.org']
+        def jenkinsCfg = new JenkinsSourceConfig(props)
+
+        then:
+        jenkinsCfg.getJenkinsReadTimeout() == 3000
+    }
+
+    //Happy scenarios - Helper methods
+
     def "GetJenkinsUrl"() {
         when:
         def jenkinsCfg = new JenkinsSourceConfig(cfg)
@@ -122,5 +146,21 @@ class JenkinsSourceConfigTest extends Specification {
 
         then:
         jenkinsCfg.getJobsResource() == new URL('https://builds.apache.org/api/json')
+    }
+
+    def "GetJenkinsConnTimeout"() {
+        when:
+        def jenkinsCfg = new JenkinsSourceConfig(cfg)
+
+        then:
+        jenkinsCfg.getJenkinsConnTimeout() == 1000
+    }
+
+    def "GetJenkinsReadTimeout"() {
+        when:
+        def jenkinsCfg = new JenkinsSourceConfig(cfg)
+
+        then:
+        jenkinsCfg.getJenkinsReadTimeout() == 5000
     }
 }

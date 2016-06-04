@@ -33,6 +33,17 @@ public class JenkinsSourceConfig extends AbstractConfig {
     public static final String JENKINS_PASSWORD_OR_API_TOKEN_CONFIG = "jenkins.password.or.api.token";
     private static final String JENKINS_PASSWORD_OR_API_TOKEN_DOC = "Password (or API Token) to use when connecting to protected Jenkins.";
 
+    public static final String JENKINS_CONN_TIMEOUT_CONFIG = "jenkins.connection.timeoutInMillis";
+    private static final int JENKINS_CONN_TIMEOUT_DEFAULT = 500;
+    public static final String JENKINS_CONN_TIMEOUT_DOC = "Connection timeout in milliseconds. " +
+            "This denotes the time elapsed before the connection established or Server responded to connection request.";
+
+    public static final String JENKINS_READ_TIMEOUT_CONFIG = "jenkins.read.timeoutInMillis";
+    private static final int JENKINS_READ_TIMEOUT_DEFAULT = 3000;
+    public static final String JENKINS_READ_TIMEOUT_DOC = "Response read timeout in milliseconds. After establishing the connection, " +
+            "the client socket waits for response after sending the request. " +
+            "This is the elapsed time since the client has sent request to the server before server responds.";
+
     public static final String TOPIC_CONFIG = "topic";
     public static final String TOPIC_CONFIG_DOC = "This is the name of the Kafka Topic to which the source records containing Jenkins Build details are written to.";
     public static final String TOPIC_CONFIG_DEFAULT = "jenkins.connector.topic";
@@ -44,6 +55,8 @@ public class JenkinsSourceConfig extends AbstractConfig {
                 .define(JENKINS_BASE_URL_CONFIG, ConfigDef.Type.STRING, ConfigDef.Importance.HIGH, JENKINS_BASE_URL_DOC)
                 .define(JENKINS_USERNAME_CONFIG, ConfigDef.Type.STRING, "", ConfigDef.Importance.LOW, JENKINS_USERNAME_CONFIG_DOC)
                 .define(JENKINS_PASSWORD_OR_API_TOKEN_CONFIG, ConfigDef.Type.STRING, "", ConfigDef.Importance.LOW, JENKINS_PASSWORD_OR_API_TOKEN_DOC)
+                .define(JENKINS_CONN_TIMEOUT_CONFIG, ConfigDef.Type.INT, JENKINS_CONN_TIMEOUT_DEFAULT, ConfigDef.Importance.LOW, JENKINS_CONN_TIMEOUT_DOC)
+                .define(JENKINS_READ_TIMEOUT_CONFIG, ConfigDef.Type.INT, JENKINS_READ_TIMEOUT_DEFAULT, ConfigDef.Importance.LOW, JENKINS_READ_TIMEOUT_DOC)
                 .define(JOBS_RESOURCE_PATH_CONFIG, ConfigDef.Type.STRING, JOBS_RESOURCE_PATH_DEFAULT, ConfigDef.Importance.LOW, JOBS_RESOURCE_PATH_DOC)
                 .define(TOPIC_CONFIG, ConfigDef.Type.STRING, TOPIC_CONFIG_DEFAULT, ConfigDef.Importance.LOW, TOPIC_CONFIG_DOC);
     }
@@ -78,5 +91,13 @@ public class JenkinsSourceConfig extends AbstractConfig {
         } catch (MalformedURLException e) {
             throw new ConfigException("Couldn't create the URL from " + getString(JENKINS_BASE_URL_CONFIG), e);
         }
+    }
+
+    public int getJenkinsConnTimeout() {
+        return getInt(JENKINS_CONN_TIMEOUT_CONFIG);
+    }
+
+    public int getJenkinsReadTimeout() {
+        return getInt(JENKINS_READ_TIMEOUT_CONFIG);
     }
 }
