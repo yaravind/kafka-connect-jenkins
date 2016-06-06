@@ -8,13 +8,16 @@ Kafka Connect Connector for Jenkins Open Source Continuous Integration Tool.
 
 kafka-connect-jenkins is a [Kafka Connector](http://kafka.apache.org/0100/documentation.html#connect) for loading data from [Jenkins](https://jenkins.io/) Open Source [Continuous Integration](https://en.wikipedia.org/wiki/Continuous_integration) Tool.
 
+### Details
+
+![](https://github.com/yaravind/kafka-connect-jenkins/blob/master/src/site/resources/images/jenkins-resource-relationships.png)
+
 ## What can I do with it?
 
 In an organization, there can be one or more CI/CD servers (usually Jenkins) managing the day to day builds
 and deployments of various components or services. We usually see each business unit (or vertical) managing
 their own Jenkins instance. Any such organization can benefit from treating **build events** same like any other
 transactional or master data. [Here are some use-cases](https://github.com/yaravind/kafka-connect-jenkins/wiki/Use-cases) that these **build events** can enable.
-
 
 ## How to use it?
 
