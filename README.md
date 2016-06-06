@@ -20,7 +20,7 @@ We will use Apache Jenkins REST API to demonstrate an example.
 
 | Resource  | Details |
 |-----------|---------|
-| Get list of all Jobs: https://builds.apache.org/api/json <br/> GET **lastBuild** of `Abdera-trunk` Job: https://builds.apache.org/job/Abdera-trunk/api/json <br/> GET BuildDetails for build `2546` of job `Abdera-trunk` https://builds.apache.org/job/Abdera-trunk/2546/api/json | ![](https://github.com/yaravind/kafka-connect-jenkins/blob/master/src/site/resources/images/jenkins-resource-relationships.png) |
+| Get list of all Jobs: https://builds.apache.org/api/json <br/><br/> GET **lastBuild** of `Abdera-trunk` Job: https://builds.apache.org/job/Abdera-trunk/api/json <br/><br/> GET BuildDetails for build `2546` of job `Abdera-trunk` https://builds.apache.org/job/Abdera-trunk/2546/api/json | ![](https://github.com/yaravind/kafka-connect-jenkins/blob/master/src/site/resources/images/jenkins-resource-relationships.png) |
 
 
 ## What can I do with it?
