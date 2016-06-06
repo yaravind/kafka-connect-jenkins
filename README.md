@@ -10,6 +10,10 @@ kafka-connect-jenkins is a [Kafka Connector](http://kafka.apache.org/0100/docume
 
 ### Details
 
+    +--------+   0..*   +-------+  0..*   +-------+   1      +--------------+
+    | Server +--------> |  Job  +-------> | Build +--------> | BuildDetails |
+    +--------+          +-------+         +-------+          +--------------+
+
 ![](https://github.com/yaravind/kafka-connect-jenkins/blob/master/src/site/resources/images/jenkins-resource-relationships.png)
 
 ## What can I do with it?
