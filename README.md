@@ -59,13 +59,15 @@ While testing, you might want to run the connector in standalone mode. Follow th
 
 ### Configurations
 
-| Property | Description | Mandatory? | Default value | 
+| Property | Description | Required? | Default value | 
 |----------|-------------|------------|---------------|
-|connector.class|Class implementing source connector for Jenkins.|Yes|org.aravind.oss.kafka.connect.jenkins.JenkinsSourceConnector|
-|tasks.max| |Yes|1|
-|jenkins.base.url|The URL where jenkins server is running|Yes|None|
-|jenkins.username|If your Jenkins is secured, you can provide the username with this property|No|None|
-|jenkins.password.or.api.token|If your Jenkins is secured, you can provide the password or api token with this property|No|None|
+|`connector.class`|Class implementing source connector for Jenkins.|Yes|org.aravind.oss.kafka.connect.<br/>jenkins.JenkinsSourceConnector|
+|`tasks.max`| |Yes|1|
+|`jenkins.base.url`|The URL where jenkins server is running|Yes|None|
+|`jenkins.username`|If your Jenkins is secured, you can provide the username with this property|No|None|
+|`jenkins.password.or.api.token`|If your Jenkins is secured, you can provide the password or api token with this property|No|None|
+|`jenkins.connection.timeoutInMillis`|Connection timeout in milliseconds. This denotes the time elapsed before the connection established or Server responded to connection request.|Yes|500|
+|`jenkins.read.timeoutInMillis`|Response read timeout in milliseconds. After establishing the connection, the client socket waits for response after sending the request. This is the elapsed time since the client has sent request to the server before server responds.|Yes|3000|
 |topic|Name of the topic where the Build status records are written to. **Make sure you explicitly create this topic using tools provided by Kafka. Do not rely on the default topic creation functionality in PRODUCTION.**|Yes|jenkins.connector.topic|
 
 ## Contribute
