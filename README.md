@@ -14,7 +14,11 @@ kafka-connect-jenkins is a [Kafka Connector](http://kafka.apache.org/0100/docume
     | Server +--------> |  Job  +-------> | Build +--------> | BuildDetails |
     +--------+          +-------+         +-------+          +--------------+
 
-|https://builds.apache.org/api/json <br/> https://builds.apache.org/job/Abdera-trunk/api/json <br/> https://builds.apache.org/job/Abdera-trunk/2546/api/json| ![](https://github.com/yaravind/kafka-connect-jenkins/blob/master/src/site/resources/images/jenkins-resource-relationships.png) |
+
+| Resource  | Details |
+|-----------|---------|
+| https://builds.apache.org/api/json <br/> https://builds.apache.org/job/Abdera-trunk/api/json <br/> https://builds.apache.org/job/Abdera-trunk/2546/api/json | ![](https://github.com/yaravind/kafka-connect-jenkins/blob/master/src/site/resources/images/jenkins-resource-relationships.png) |
+
 
 ## What can I do with it?
 
