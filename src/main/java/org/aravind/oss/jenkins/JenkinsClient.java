@@ -20,8 +20,8 @@ import java.util.Optional;
  * @since 0.5.0
  */
 public class JenkinsClient {
-    private static final int SO_TIMEOUT_IN_MILLIS = 3000;
-    private static final int CONN_TIMEOUT_IN_MILLIS = 500;
+    private final int connTimeoutInMillis;
+    private final int readTimeoutInMillis;
     private final URL resourceUrl;
     private Optional<String> userName = Optional.empty();
     private Optional<String> passwordOrApiToken = Optional.empty();
@@ -29,18 +29,24 @@ public class JenkinsClient {
     private static final Logger logger = LoggerFactory.getLogger(JenkinsClient.class);
 
     /**
-     * @param url resource url of the jenkins item
+     * @param url         resource url of the jenkins item
+     * @param connTimeout Connection timeout in milliseconds. This denotes the time elapsed before the connection established or Server responded to connection request.
+     * @param readTimeout Response read timeout in milliseconds. After establishing the connection, the client socket waits for response after sending the request. This is the elapsed time since the client has sent request to the server before server responds.
      */
-    public JenkinsClient(URL url) {
+    public JenkinsClient(URL url, int connTimeout, int readTimeout) {
         resourceUrl = url;
+        connTimeoutInMillis = connTimeout;
+        readTimeoutInMillis = readTimeout;
     }
 
     /**
-     * @param url      url of the jenkins instance
-     * @param uname    username if authentication is enabled in jenkins instance
-     * @param password password or API token if authentication is enabled in jenkins instance
+     * @param url         url of the jenkins instance
+     * @param uname       username if authentication is enabled in jenkins instance
+     * @param password    password or API token if authentication is enabled in jenkins instance
+     * @param connTimeout Connection timeout in milliseconds. This denotes the time elapsed before the connection established or Server responded to connection request.
+     * @param readTimeout Response read timeout in milliseconds. After establishing the connection, the client socket waits for response after sending the request. This is the elapsed time since the client has sent request to the server before server responds.
      */
-    public JenkinsClient(URL url, String uname, String password) throws JenkinsException {
+    public JenkinsClient(URL url, String uname, String password, int connTimeout, int readTimeout) throws JenkinsException {
         if (uname.isEmpty()) {
             throw new JenkinsException("Missing Jenkins username for authentication");
         }
@@ -50,16 +56,20 @@ public class JenkinsClient {
         resourceUrl = url;
         userName = Optional.of(uname);
         passwordOrApiToken = Optional.of(password);
+        connTimeoutInMillis = connTimeout;
+        readTimeoutInMillis = readTimeout;
     }
 
     public HttpURLConnection connect() throws JenkinsException {
+        logger.trace("Connecting to {} with conn timeout {} ms and read timeout {} ms", resourceUrl, connTimeoutInMillis, readTimeoutInMillis);
         HttpURLConnection conn = null;
         try {
             conn = (HttpURLConnection) resourceUrl.openConnection();
-            conn.setConnectTimeout(CONN_TIMEOUT_IN_MILLIS);
-            conn.setReadTimeout(SO_TIMEOUT_IN_MILLIS);
+            conn.setConnectTimeout(connTimeoutInMillis);
+            conn.setReadTimeout(readTimeoutInMillis);
             if (userName.isPresent()) {
                 conn.setRequestProperty("Authorization", "Basic " + getAuthenticationString());
+                logger.trace("Using Basic Authentication with username {}", userName);
             }
 
             conn.connect();

@@ -45,7 +45,7 @@ public class JenkinsSourceConnector extends SourceConnector {
 
         //Initialize connection to Jenkins instance
         try {
-            client = new JenkinsClient(jenkinsCfg.getJobsResource());
+            client = new JenkinsClient(jenkinsCfg.getJobsResource(), jenkinsCfg.getJenkinsConnTimeout(), jenkinsCfg.getJenkinsReadTimeout());
 
             //Do a test connection to Fail Fast
             HttpURLConnection connection = client.connect();

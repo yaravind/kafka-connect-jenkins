@@ -23,6 +23,8 @@ import static com.github.dreamhead.moco.Moco.pathResource
  */
 class JenkinsClientTest extends Specification {
 
+    public static final int CONN_TIMEOUT = 100
+    public static final int READ_TIMEOUT = 500
     @Shared
     Runner mock
 
@@ -35,7 +37,7 @@ class JenkinsClientTest extends Specification {
         mock.start()
 
         //trust the self-signed cert.jks
-        System.setProperty("javax.net.ssl.trustStore","src/test/resources/cert.jks")
+        System.setProperty("javax.net.ssl.trustStore", "src/test/resources/cert.jks")
 
         def httpsServer = httpsServer(9443, HttpsCertificate.certificate(pathResource("cert.jks"), "mocohttps", "mocohttps"))
         httpsMock = runner(httpsServer)
@@ -55,7 +57,7 @@ class JenkinsClientTest extends Specification {
 
         when: "A request is submitted"
         def url = new URL("http://localhost:9495/api/json")
-        def jenkins = new JenkinsClient(url, userName, password)
+        def jenkins = new JenkinsClient(url, userName, password, CONN_TIMEOUT, READ_TIMEOUT)
         def response = jenkins.get()
 
         then: "response should be empty and an exception is swallowed but logged"
@@ -76,7 +78,7 @@ class JenkinsClientTest extends Specification {
 
         when: "A request is submitted"
         def url = new URL("http://localhost:9495/api/json")
-        def jenkins = new JenkinsClient(url, userName, password)
+        def jenkins = new JenkinsClient(url, userName, password, CONN_TIMEOUT, READ_TIMEOUT)
         def response = jenkins.get()
 
         then: "response should be empty and an exception is swallowed but logged"
@@ -91,7 +93,7 @@ class JenkinsClientTest extends Specification {
     def "Supports Jenkins without authentication"() {
         when:
         def url = new URL("http://localhost:9191/")
-        def jenkins = new JenkinsClient(url)
+        def jenkins = new JenkinsClient(url, CONN_TIMEOUT, READ_TIMEOUT)
         def response = jenkins.get()
 
         then:
@@ -101,7 +103,7 @@ class JenkinsClientTest extends Specification {
     def "Supports GET"() {
         given:
         def url = new URL("http://localhost:9191/api/json")
-        def jenkins = new JenkinsClient(url)
+        def jenkins = new JenkinsClient(url, CONN_TIMEOUT, READ_TIMEOUT)
 
         when:
         def allJobs = jenkins.get()
@@ -122,7 +124,7 @@ class JenkinsClientTest extends Specification {
 
         when: "A request is submitted"
         def url = new URL("http://localhost:9494/api/json")
-        def jenkins = new JenkinsClient(url, userName, password)
+        def jenkins = new JenkinsClient(url, userName, password, CONN_TIMEOUT, READ_TIMEOUT)
         def response = jenkins.get()
 
         then: "A valid response should be present"
@@ -134,7 +136,7 @@ class JenkinsClientTest extends Specification {
     def "Supports Jenkins with SSL"() {
         when:
         def url = new URL("https://localhost:9443")
-        def jenkins = new JenkinsClient(url)
+        def jenkins = new JenkinsClient(url, CONN_TIMEOUT, READ_TIMEOUT)
         def response = jenkins.get()
 
         then:
@@ -161,7 +163,7 @@ class JenkinsClientTest extends Specification {
 
         when:
         def url = new URL("https://localhost:10443")
-        def jenkins = new JenkinsClient(url, userName, password)
+        def jenkins = new JenkinsClient(url, userName, password, CONN_TIMEOUT, READ_TIMEOUT)
         def response = jenkins.get()
 
         then: "A valid response should be present"

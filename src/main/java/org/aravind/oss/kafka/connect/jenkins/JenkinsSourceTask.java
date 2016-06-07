@@ -18,6 +18,10 @@ import java.net.URL;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static java.lang.String.valueOf;
+import static org.aravind.oss.kafka.connect.jenkins.JenkinsSourceConfig.*;
+import static org.aravind.oss.kafka.connect.jenkins.JenkinsSourceConfig.JENKINS_CONN_TIMEOUT_CONFIG;
+
 /**
  * @author Aravind R Yarram
  * @since 0.5.0
@@ -49,7 +53,7 @@ public class JenkinsSourceTask extends SourceTask {
         JenkinsClient client = null;
 
         try {
-            client = new JenkinsClient(new URL(jobUrl + "api/json"));
+            client = new JenkinsClient(new URL(jobUrl + "api/json"), getJenkinsConnTimeout(), getJenkinsReadTimeout());
         } catch (MalformedURLException e) {
             logger.error("Can't create URL object for {}.", jobUrl, e);
             //TODO Silently log the error and ignore? What should we do?
@@ -93,7 +97,7 @@ public class JenkinsSourceTask extends SourceTask {
                         if (lastBuildDetails.isPresent()) {
                             //add build details JSON string as the value
                             logger.debug("Create SourceRecord");
-                            SourceRecord record = new SourceRecord(sourcePartition, sourceOffset, taskProps.get(JenkinsSourceConfig.TOPIC_CONFIG), Schema.STRING_SCHEMA, lastBuildDetails.get());
+                            SourceRecord record = new SourceRecord(sourcePartition, sourceOffset, taskProps.get(TOPIC_CONFIG), Schema.STRING_SCHEMA, lastBuildDetails.get());
                             return Optional.of(record);
                         } else {
                             logger.debug("Ignoring job details for {} as there are no builds for this Job. Not creating SourceRecord.", lastBuild.getBuildDetailsResource());
@@ -176,5 +180,13 @@ public class JenkinsSourceTask extends SourceTask {
 
     public Optional<Map<String, Object>> getOffset(String partitionValue) {
         return Optional.ofNullable(offsets.get(Collections.singletonMap(JOB_NAME, partitionValue)));
+    }
+
+    private int getJenkinsReadTimeout() {
+        return Integer.valueOf(taskProps.getOrDefault(JENKINS_READ_TIMEOUT_CONFIG, valueOf(JENKINS_READ_TIMEOUT_DEFAULT)));
+    }
+
+    private int getJenkinsConnTimeout() {
+        return Integer.valueOf(taskProps.getOrDefault(JENKINS_CONN_TIMEOUT_CONFIG, valueOf(JENKINS_CONN_TIMEOUT_DEFAULT)));
     }
 }

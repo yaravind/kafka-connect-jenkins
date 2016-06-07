@@ -34,12 +34,12 @@ public class JenkinsSourceConfig extends AbstractConfig {
     private static final String JENKINS_PASSWORD_OR_API_TOKEN_DOC = "Password (or API Token) to use when connecting to protected Jenkins.";
 
     public static final String JENKINS_CONN_TIMEOUT_CONFIG = "jenkins.connection.timeoutInMillis";
-    private static final int JENKINS_CONN_TIMEOUT_DEFAULT = 500;
+    public static final int JENKINS_CONN_TIMEOUT_DEFAULT = 500;
     public static final String JENKINS_CONN_TIMEOUT_DOC = "Connection timeout in milliseconds. " +
             "This denotes the time elapsed before the connection established or Server responded to connection request.";
 
     public static final String JENKINS_READ_TIMEOUT_CONFIG = "jenkins.read.timeoutInMillis";
-    private static final int JENKINS_READ_TIMEOUT_DEFAULT = 3000;
+    public static final int JENKINS_READ_TIMEOUT_DEFAULT = 3000;
     public static final String JENKINS_READ_TIMEOUT_DOC = "Response read timeout in milliseconds. After establishing the connection, " +
             "the client socket waits for response after sending the request. " +
             "This is the elapsed time since the client has sent request to the server before server responds.";
