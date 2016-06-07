@@ -2,7 +2,7 @@
 
 # Kafka Connect Jenkins
 
-Kafka Connect Connector for Jenkins Open Source Continuous Integration Tool. **The connector is currently under development. Hoping to release the Beta version by end of this month. Contributions welcome!**
+Kafka Connect Connector for Jenkins Open Source Continuous Integration Tool. **The connector is currently under development. Hoping to release the Beta version sometime in July. Contributions welcome!**
 
 ## What is it?
 
