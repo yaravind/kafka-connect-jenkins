@@ -40,14 +40,13 @@ public class JenkinsSourceConnector extends SourceConnector {
      */
     @Override
     public void start(Map<String, String> props) {
-        logger.debug("Starting the Connector");
+        logger.debug("Starting the Jenkins Connector");
         jenkinsCfg = new JenkinsSourceConfig(props);
 
-        //Initialize connection to Jenkins instance
+        //Do a test connection to Fail Fast
         try {
+            logger.trace("Doing a test connection to {}", jenkinsCfg.getJobsResource());
             client = new JenkinsClient(jenkinsCfg.getJobsResource(), jenkinsCfg.getJenkinsConnTimeout(), jenkinsCfg.getJenkinsReadTimeout());
-
-            //Do a test connection to Fail Fast
             HttpURLConnection connection = client.connect();
             connection.disconnect();
         } catch (JenkinsException e) {

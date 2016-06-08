@@ -61,7 +61,7 @@ public class JenkinsSourceTask extends SourceTask {
         Optional<String> resp = Optional.empty();
         if (client != null) {
             try {
-                logger.debug("GET job details for {}", jobUrl + "api/json");
+                logger.trace("GET job details for {}", jobUrl + "api/json");
                 resp = client.get();
             } catch (JenkinsException e) {
                 logger.error("Can't do a GET to resource {}", jobUrl + "api/json", e);
@@ -89,7 +89,7 @@ public class JenkinsSourceTask extends SourceTask {
                     //Some jobs might not have any builds. TODO need to figure out how to represent these
                     //And the lastBuild might have already been stored
                     if (lastBuild != null && !lastBuild.getNumber().equals(lastSavedBuildNumber)) {
-                        logger.debug("Partition: {}, lastBuild: {}, lastSavedBuild: {}", partitionValue, lastBuild.getNumber(), lastSavedBuildNumber);
+                        logger.trace("Partition: {}, lastBuild: {}, lastSavedBuild: {}", partitionValue, lastBuild.getNumber(), lastSavedBuildNumber);
                         Map<String, Long> sourceOffset = Collections.singletonMap(BUILD_NUMBER, lastBuild.getNumber());
 
                         //get Build details
@@ -117,25 +117,27 @@ public class JenkinsSourceTask extends SourceTask {
 
     @Override
     public List<SourceRecord> poll() throws InterruptedException {
+        logger.debug("In poll()");
         //Keep trying in a loop until stop() is called on this instance.
         //TODO use RxJava for this in future
         while (!stop.get()) {
             String jobUrls = taskProps.get(JOB_URLS);
             String[] jobUrlArray = jobUrls.split(",");
 
-            logger.debug("Loading offsets");
+            logger.debug("Total jobs: {}. Loading previous offsets.", jobUrlArray.length);
             Collection<Map<String, String>> partitions = new ArrayList<>(jobUrlArray.length);
             for (String jobUrl : jobUrlArray) {
                 partitions.add(Collections.singletonMap(JOB_NAME, extractJobName(jobUrl)));
             }
             offsets = context.offsetStorageReader().offsets(partitions);
+            logger.debug("Total loaded offsets: {}", offsets.size());
             logger.trace("Loaded offsets: {}", offsets);
 
             List<SourceRecord> records = new ArrayList<>();
             for (String jobUrl : jobUrlArray) {
                 String partitionValue = extractJobName(jobUrl);
                 logger.debug("Get lastSavedOffset for {} with partitionValue as {}", jobUrl, partitionValue);
-                logger.trace("Contains partition {}? : {}", partitionValue, containsPartition(partitionValue));
+                logger.debug("Contains partition {}? : {}", partitionValue, containsPartition(partitionValue));
                 Optional<Map<String, Object>> offset = getOffset(partitionValue);
 
                 Long lastSavedBuildNumber = null;
@@ -148,9 +150,11 @@ public class JenkinsSourceTask extends SourceTask {
                 Optional<SourceRecord> sourceRecord = createSourceRecord(jobUrl, lastSavedBuildNumber);
                 if (sourceRecord.isPresent()) records.add(sourceRecord.get());
             }
+            logger.debug("Total SourceRecords created: . Returning these from poll()", records.size());
             return records;
         }
 
+        logger.debug("Returning null from poll(). This is because the runtime called shutdown.");
         //Only in case of shutdown. null indicates no data
         return null;
     }
