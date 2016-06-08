@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/yaravind/kafka-connect-jenkins.png?label=ready&title=Ready)](https://waffle.io/yaravind/kafka-connect-jenkins)
 [![Build Status](https://snap-ci.com/yaravind/kafka-connect-jenkins/branch/master/build_image)](https://snap-ci.com/yaravind/kafka-connect-jenkins/branch/master) [![Coverage Status](https://coveralls.io/repos/github/yaravind/kafka-connect-jenkins/badge.svg?branch=master)](https://coveralls.io/github/yaravind/kafka-connect-jenkins?branch=master) [![Codacy Badge](https://api.codacy.com/project/badge/grade/c6faadd0154740aeb202710fcdea3dfc)](https://www.codacy.com/app/yaravind/kafka-connect-jenkins/dashboard) [![HitCount](https://hitt.herokuapp.com/yaravind/kafka-connect-jenkins.svg)](https://github.com/yaravind/kafka-connect-jenkins)
 
 # Kafka Connect Jenkins
