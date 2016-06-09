@@ -93,6 +93,8 @@ public class JenkinsSourceTask extends SourceTask {
                         Map<String, Long> sourceOffset = Collections.singletonMap(BUILD_NUMBER, lastBuild.getNumber());
 
                         //get Build details
+                        lastBuild.setConnTimeoutInMillis(getJenkinsConnTimeout());
+                        lastBuild.setReadTimeoutInMillis(getJenkinsReadTimeout());
                         Optional<String> lastBuildDetails = lastBuild.getDetails();
                         if (lastBuildDetails.isPresent()) {
                             //add build details JSON string as the value
@@ -150,7 +152,7 @@ public class JenkinsSourceTask extends SourceTask {
                 Optional<SourceRecord> sourceRecord = createSourceRecord(jobUrl, lastSavedBuildNumber);
                 if (sourceRecord.isPresent()) records.add(sourceRecord.get());
             }
-            logger.debug("Total SourceRecords created: . Returning these from poll()", records.size());
+            logger.debug("Total SourceRecords created: {}. Returning these from poll()", records.size());
             return records;
         }
 

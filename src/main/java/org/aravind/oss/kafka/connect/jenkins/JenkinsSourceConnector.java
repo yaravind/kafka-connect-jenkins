@@ -98,7 +98,7 @@ public class JenkinsSourceConnector extends SourceConnector {
                         .collect(Collectors.joining(","));
 
                 taskProps.put(JenkinsSourceTask.JOB_URLS, commaSeparatedJobUrls);
-                logger.debug("taskProps: {}", taskProps);
+                logger.trace("taskProps: {}", taskProps);
                 taskConfigs.add(taskProps);
             }
             return taskConfigs;
