@@ -5,6 +5,7 @@ import org.apache.kafka.connect.data.Schema;
 import org.apache.kafka.connect.source.SourceRecord;
 import org.apache.kafka.connect.source.SourceTask;
 import org.apache.kafka.connect.source.SourceTaskContext;
+import org.apache.kafka.connect.storage.OffsetStorageReader;
 import org.aravind.oss.jenkins.JenkinsClient;
 import org.aravind.oss.jenkins.JenkinsException;
 import org.aravind.oss.jenkins.domain.Build;
@@ -13,14 +14,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLDecoder;
+import java.nio.charset.Charset;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static java.lang.String.valueOf;
 import static org.aravind.oss.kafka.connect.jenkins.JenkinsSourceConfig.*;
 import static org.aravind.oss.kafka.connect.jenkins.JenkinsSourceConfig.JENKINS_CONN_TIMEOUT_CONFIG;
+import static org.aravind.oss.kafka.connect.jenkins.Util.extractJobName;
+import static org.aravind.oss.kafka.connect.jenkins.Util.urlDecode;
 
 /**
  * @author Aravind R Yarram
@@ -35,7 +41,8 @@ public class JenkinsSourceTask extends SourceTask {
     private Map<String, String> taskProps;
     private ObjectMapper mapper = new ObjectMapper();
     private AtomicBoolean stop;
-    private Map<Map<String, String>, Map<String, Object>> offsets;
+    // private Map<Map<String, String>, Map<String, Object>> offsets;
+    private ReadYourWritesOffsetStorageAdapter storageAdapter;
 
     @Override
     public String version() {
@@ -81,7 +88,7 @@ public class JenkinsSourceTask extends SourceTask {
                 logger.trace("Builds are: {}", builds);
 
                 if (builds != null) {
-                    String partitionValue = builds.getName();
+                    String partitionValue = builds.getUrlDecodedName();
                     Map<String, String> sourcePartition = Collections.singletonMap(JOB_NAME, partitionValue);
 
                     Build lastBuild = builds.getLastBuild();
@@ -102,7 +109,7 @@ public class JenkinsSourceTask extends SourceTask {
                             SourceRecord record = new SourceRecord(sourcePartition, sourceOffset, taskProps.get(TOPIC_CONFIG), Schema.STRING_SCHEMA, lastBuildDetails.get());
                             return Optional.of(record);
                         } else {
-                            logger.debug("Ignoring job details for {} as there are no builds for this Job. Not creating SourceRecord.", lastBuild.getBuildDetailsResource());
+                            logger.error("Ignoring job details for {} as there are no builds for this Job. Not creating SourceRecord.", lastBuild.getBuildDetailsResource());
                         }
                     } else {
                         logger.debug("Not creating SourceRecord for {} because either the lastBuild details aren't available or it was already saved earlier", jobUrl + "api/json");
@@ -120,34 +127,28 @@ public class JenkinsSourceTask extends SourceTask {
     @Override
     public List<SourceRecord> poll() throws InterruptedException {
         logger.debug("In poll()");
+
         //Keep trying in a loop until stop() is called on this instance.
         //TODO use RxJava for this in future
         while (!stop.get()) {
             String jobUrls = taskProps.get(JOB_URLS);
-            String[] jobUrlArray = jobUrls.split(",");
+            storageAdapter = new ReadYourWritesOffsetStorageAdapter(context.offsetStorageReader(), jobUrls);
 
-            logger.debug("Total jobs: {}. Loading previous offsets.", jobUrlArray.length);
-            Collection<Map<String, String>> partitions = new ArrayList<>(jobUrlArray.length);
-            for (String jobUrl : jobUrlArray) {
-                partitions.add(Collections.singletonMap(JOB_NAME, extractJobName(jobUrl)));
-            }
-            offsets = context.offsetStorageReader().offsets(partitions);
-            logger.debug("Total loaded offsets: {}", offsets.size());
-            logger.trace("Loaded offsets: {}", offsets);
+            String[] jobUrlArray = jobUrls.split(",");
 
             List<SourceRecord> records = new ArrayList<>();
             for (String jobUrl : jobUrlArray) {
-                String partitionValue = extractJobName(jobUrl);
+                String partitionValue = urlDecode(extractJobName(jobUrl));
+
                 logger.debug("Get lastSavedOffset for {} with partitionValue as {}", jobUrl, partitionValue);
-                logger.debug("Contains partition {}? : {}", partitionValue, containsPartition(partitionValue));
-                Optional<Map<String, Object>> offset = getOffset(partitionValue);
+                Optional<Map<String, Object>> offset = storageAdapter.getOffset(partitionValue);
 
                 Long lastSavedBuildNumber = null;
                 if (offset.isPresent()) {
                     logger.debug("lastSavedOffset for {} is {}", partitionValue, offset);
                     lastSavedBuildNumber = (Long) offset.get().get(BUILD_NUMBER);
                 } else {
-                    logger.debug("lastSavedOffset not available for {}", partitionValue);
+                    logger.error("lastSavedOffset not available for: {}", partitionValue);
                 }
                 Optional<SourceRecord> sourceRecord = createSourceRecord(jobUrl, lastSavedBuildNumber);
                 if (sourceRecord.isPresent()) records.add(sourceRecord.get());
@@ -161,13 +162,6 @@ public class JenkinsSourceTask extends SourceTask {
         return null;
     }
 
-    private String extractJobName(String jobUrl) {
-        //For input - https://builds.apache.org/job/Accumulo-Master/
-        //This method should return - Accumulo-Master
-        String[] tokens = jobUrl.split("/");
-        return tokens[tokens.length - 1];
-    }
-
     @Override
     public synchronized void stop() {
         logger.debug("Stopping the Task");
@@ -177,15 +171,6 @@ public class JenkinsSourceTask extends SourceTask {
     @Override
     public void initialize(SourceTaskContext context) {
         super.initialize(context);
-    }
-
-
-    public boolean containsPartition(String partitionValue) {
-        return offsets.keySet().contains(Collections.singletonMap(JOB_NAME, partitionValue));
-    }
-
-    public Optional<Map<String, Object>> getOffset(String partitionValue) {
-        return Optional.ofNullable(offsets.get(Collections.singletonMap(JOB_NAME, partitionValue)));
     }
 
     private int getJenkinsReadTimeout() {
