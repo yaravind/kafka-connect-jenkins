@@ -1,6 +1,8 @@
 package org.aravind.oss.kafka.connect.jenkins;
 
 import org.apache.kafka.connect.storage.OffsetStorageReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -39,13 +41,13 @@ public class ReadYourWritesOffsetStorageAdapter {
     //Offsets from StorageReader
     private Map<Map<String, String>, Map<String, Object>> offsets;
 
+    private static final Logger logger = LoggerFactory.getLogger(ReadYourWritesOffsetStorageAdapter.class);
+
     public ReadYourWritesOffsetStorageAdapter(OffsetStorageReader reader, String jobUrls) {
         storageReader = reader;
         offsets = loadAndGetOffsets(storageReader, jobUrls);
-        Util.logger.debug("Total loaded offsets: {}", offsets.size());
-        Util.logger.error("Loaded offsets: {}", offsets);
+        logger.debug("Loaded offsets: {}", offsets);
     }
-
 
     public boolean containsPartition(String partitionValue) {
         return offsets.keySet().contains(Collections.singletonMap(JenkinsSourceTask.JOB_NAME, partitionValue));
@@ -58,13 +60,11 @@ public class ReadYourWritesOffsetStorageAdapter {
     private Map<Map<String, String>, Map<String, Object>> loadAndGetOffsets(OffsetStorageReader reader, String jobUrls) {
         String[] jobUrlArray = jobUrls.split(",");
 
-        Util.logger.debug("Total jobs: {}. Loading offsets from Connect.", jobUrlArray.length);
+        logger.debug("Total jobs: {}. Loading offsets from Connect.", jobUrlArray.length);
         Collection<Map<String, String>> partitions = new ArrayList<>(jobUrlArray.length);
         for (String jobUrl : jobUrlArray) {
             partitions.add(Collections.singletonMap(JenkinsSourceTask.JOB_NAME, urlDecode(extractJobName(jobUrl))));
         }
         return reader.offsets(partitions);
     }
-
-
 }

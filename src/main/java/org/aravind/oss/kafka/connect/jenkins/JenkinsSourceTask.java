@@ -41,7 +41,6 @@ public class JenkinsSourceTask extends SourceTask {
     private Map<String, String> taskProps;
     private ObjectMapper mapper = new ObjectMapper();
     private AtomicBoolean stop;
-    // private Map<Map<String, String>, Map<String, Object>> offsets;
     private ReadYourWritesOffsetStorageAdapter storageAdapter;
 
     @Override
@@ -71,7 +70,7 @@ public class JenkinsSourceTask extends SourceTask {
                 logger.trace("GET job details for {}", jobUrl + "api/json");
                 resp = client.get();
             } catch (JenkinsException e) {
-                logger.error("Can't do a GET to resource {}", jobUrl + "api/json", e);
+                logger.warn("Can't do a GET to resource {}", jobUrl + "api/json", e);
                 //TODO Silently log the error and ignore? What should we do?
             }
             if (resp.isPresent()) {
@@ -85,10 +84,10 @@ public class JenkinsSourceTask extends SourceTask {
                     logger.error("Error while parsing the Build JSON {} for {}", resp.get(), jobUrl + "api/json", e);
                 }
 
-                logger.trace("Builds are: {}", builds);
+                logger.debug("Builds are: {}", builds);
 
                 if (builds != null) {
-                    String partitionValue = builds.getUrlDecodedName();
+                    String partitionValue = builds.getName();
                     Map<String, String> sourcePartition = Collections.singletonMap(JOB_NAME, partitionValue);
 
                     Build lastBuild = builds.getLastBuild();
@@ -103,13 +102,14 @@ public class JenkinsSourceTask extends SourceTask {
                         lastBuild.setConnTimeoutInMillis(getJenkinsConnTimeout());
                         lastBuild.setReadTimeoutInMillis(getJenkinsReadTimeout());
                         Optional<String> lastBuildDetails = lastBuild.getDetails();
+
                         if (lastBuildDetails.isPresent()) {
                             //add build details JSON string as the value
                             logger.debug("Create SourceRecord");
                             SourceRecord record = new SourceRecord(sourcePartition, sourceOffset, taskProps.get(TOPIC_CONFIG), Schema.STRING_SCHEMA, lastBuildDetails.get());
                             return Optional.of(record);
                         } else {
-                            logger.error("Ignoring job details for {} as there are no builds for this Job. Not creating SourceRecord.", lastBuild.getBuildDetailsResource());
+                            logger.debug("Ignoring job details for {} as there are no builds for this Job. Not creating SourceRecord.", lastBuild.getBuildDetailsResource());
                         }
                     } else {
                         logger.debug("Not creating SourceRecord for {} because either the lastBuild details aren't available or it was already saved earlier", jobUrl + "api/json");
@@ -148,7 +148,7 @@ public class JenkinsSourceTask extends SourceTask {
                     logger.debug("lastSavedOffset for {} is {}", partitionValue, offset);
                     lastSavedBuildNumber = (Long) offset.get().get(BUILD_NUMBER);
                 } else {
-                    logger.error("lastSavedOffset not available for: {}", partitionValue);
+                    logger.debug("lastSavedOffset not available for: {}", partitionValue);
                 }
                 Optional<SourceRecord> sourceRecord = createSourceRecord(jobUrl, lastSavedBuildNumber);
                 if (sourceRecord.isPresent()) records.add(sourceRecord.get());
