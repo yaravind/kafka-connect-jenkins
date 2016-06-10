@@ -1,15 +1,8 @@
 package org.aravind.oss.jenkins.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.nio.charset.Charset;
 import java.util.List;
-
-import static org.aravind.oss.kafka.connect.jenkins.Util.urlDecode;
 
 /**
  * @author Aravind R Yarram
@@ -20,14 +13,9 @@ public class BuildCollection {
     private String name;
     private List<Build> builds;
     private Build lastBuild;
-    private static final Logger logger = LoggerFactory.getLogger(BuildCollection.class);
 
     public String getName() {
         return name;
-    }
-
-    public String getUrlDecodedName() {
-        return urlDecode(name);
     }
 
     public void setName(String name) {

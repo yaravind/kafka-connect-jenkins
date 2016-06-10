@@ -12,7 +12,7 @@ import java.nio.charset.Charset;
  * @since 0.5.0
  */
 public class Util {
-    static final Logger logger = LoggerFactory.getLogger(Util.class);
+    private static final Logger logger = LoggerFactory.getLogger(Util.class);
 
     public static String extractJobName(String jobUrl) {
         //For input - https://builds.apache.org/job/Accumulo-Master/
