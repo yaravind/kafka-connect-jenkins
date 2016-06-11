@@ -18,6 +18,9 @@ import java.net.URL;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.apache.kafka.common.utils.SystemTime;
+import org.apache.kafka.common.utils.Time;
+
 import static java.lang.String.valueOf;
 import static org.aravind.oss.kafka.connect.jenkins.JenkinsSourceConfig.*;
 import static org.aravind.oss.kafka.connect.jenkins.JenkinsSourceConfig.JENKINS_CONN_TIMEOUT_CONFIG;
@@ -34,6 +37,7 @@ public class JenkinsSourceTask extends SourceTask {
     public static final String BUILD_NUMBER = "buildNumber";
     private static final Logger logger = LoggerFactory.getLogger(JenkinsSourceTask.class);
 
+    private Time time;
     private Map<String, String> taskProps;
     private ObjectMapper mapper = new ObjectMapper();
     private AtomicBoolean stop;
