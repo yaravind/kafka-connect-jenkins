@@ -25,7 +25,7 @@ public class JenkinsSourceConfig extends AbstractConfig {
 
     public static final String JOBS_RESOURCE_PATH_CONFIG = "jenkins.jobs.resource.path";
     private static final String JOBS_RESOURCE_PATH_DEFAULT = "/api/json";
-    private static final String JOBS_RESOURCE_PATH_DISPLAY = "Path to API. Default (/api/json)";
+    private static final String JOBS_RESOURCE_PATH_DISPLAY = "Relative path to REST API. Default (/api/json)";
     private static final String JOBS_RESOURCE_PATH_DOC = "This is the REST resource path to retrieve all jobs defined in the Jenkins instance. " +
             "This is an optional configuration property. If not specified the default \"/api/json\" will be used.";
 

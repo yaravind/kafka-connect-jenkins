@@ -1,5 +1,6 @@
 package org.aravind.oss.kafka.connect.jenkins
 
+import org.apache.kafka.common.utils.Time
 import org.apache.kafka.connect.source.SourceTaskContext
 import org.apache.kafka.connect.storage.OffsetStorageReader
 import spock.lang.Shared
@@ -49,7 +50,7 @@ class JenkinsSourceTaskTest extends Specification {
 
     def "Should support single job url as taskProps"() {
         given:
-        def taskProps = ['job.urls': 'http://localhost:8181/job/Abdera-trunk/']
+        def taskProps = ['job.urls': 'http://localhost:8181/job/Abdera-trunk/', 'jenkins.pollIntervalInMillis': '0']
         sourceTask.start(taskProps)
 
         when:
@@ -62,7 +63,7 @@ class JenkinsSourceTaskTest extends Specification {
 
     def "Should support multiple comma separated job urls as taskProps"() {
         given:
-        def taskProps = ['job.urls': 'http://localhost:8181/job/Abdera-trunk/,http://localhost:8181/job/Accumulo-1.8/']
+        def taskProps = ['job.urls': 'http://localhost:8181/job/Abdera-trunk/,http://localhost:8181/job/Accumulo-1.8/', 'jenkins.pollIntervalInMillis': '0']
         sourceTask.start(taskProps)
 
         when:
@@ -77,7 +78,7 @@ class JenkinsSourceTaskTest extends Specification {
 
     def "Wrong URL should continue without any errors"() {
         given: "A wrong job url"
-        def taskProps = ['job.urls': 'http://wrong.host.name:8181/job/Abdera-trunk/']
+        def taskProps = ['job.urls': 'http://wrong.host.name:8181/job/Abdera-trunk/', 'jenkins.pollIntervalInMillis': '0']
         sourceTask.start(taskProps)
 
         when:
@@ -90,7 +91,7 @@ class JenkinsSourceTaskTest extends Specification {
 
     def "A Job without any builds (May be just created) should continue without any errors"() {
         given: "A job with no lastBuild"
-        def taskProps = ['job.urls': 'http://localhost:8181/job/New-Job/']
+        def taskProps = ['job.urls': 'http://localhost:8181/job/New-Job/', 'jenkins.pollIntervalInMillis': '0']
         sourceTask.start(taskProps)
 
         when:

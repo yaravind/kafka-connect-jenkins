@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -38,10 +39,18 @@ public class JenkinsSourceTask extends SourceTask {
     private static final Logger logger = LoggerFactory.getLogger(JenkinsSourceTask.class);
 
     private Time time;
+    private long lastUpdate;
+    private long pollIntervalInMillis;
+    private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
     private Map<String, String> taskProps;
     private ObjectMapper mapper = new ObjectMapper();
     private AtomicBoolean stop;
     private ReadYourWritesOffsetStorageAdapter storageAdapter;
+
+    public JenkinsSourceTask() {
+        this.time = new SystemTime();
+    }
 
     @Override
     public String version() {
@@ -52,6 +61,7 @@ public class JenkinsSourceTask extends SourceTask {
     public void start(Map<String, String> props) {
         logger.debug("Starting the Task");
         taskProps = props;
+        pollIntervalInMillis = Long.parseLong(taskProps.get(JENKINS_POLL_INTERVAL_MS_CONFIG));
         stop = new AtomicBoolean(false);
     }
 
@@ -127,10 +137,22 @@ public class JenkinsSourceTask extends SourceTask {
     @Override
     public List<SourceRecord> poll() throws InterruptedException {
         logger.debug("In poll()");
+        long now = time.milliseconds();
 
         //Keep trying in a loop until stop() is called on this instance.
         //TODO use RxJava for this in future
         while (!stop.get()) {
+
+            //Check if poll time had elapsed
+            long nextUpdate = now + pollIntervalInMillis;
+            long untilNext = nextUpdate - now;
+            logger.trace("Waiting {} ms to poll {} next", untilNext);
+            if (untilNext > 0) {
+                time.sleep(untilNext);
+                now = time.milliseconds();
+                continue;
+            }
+
             String jobUrls = taskProps.get(JOB_URLS);
             storageAdapter = new ReadYourWritesOffsetStorageAdapter(context.offsetStorageReader(), jobUrls);
 
@@ -153,6 +175,11 @@ public class JenkinsSourceTask extends SourceTask {
                 Optional<SourceRecord> sourceRecord = createSourceRecord(jobUrl, lastSavedBuildNumber);
                 if (sourceRecord.isPresent()) records.add(sourceRecord.get());
             }
+
+            //Update the last updated time to now just before returning the call
+            lastUpdate = time.milliseconds();
+            logger.trace("Setting the lastUpdate time to : {}", sdf.format(new Date(lastUpdate)));
+
             logger.debug("Total SourceRecords created: {}. Returning these from poll()", records.size());
             return records;
         }
