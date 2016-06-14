@@ -41,6 +41,7 @@ public class JenkinsSourceTask extends SourceTask {
     private Time time;
     private long lastUpdate;
     private long pollIntervalInMillis;
+    private static int totalJenkinsPulls = 1;
     private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
     private Map<String, String> taskProps;
@@ -59,7 +60,8 @@ public class JenkinsSourceTask extends SourceTask {
 
     @Override
     public void start(Map<String, String> props) {
-        logger.debug("Starting the Task");
+        logger.info("JenkinsSourceTask starting");
+        lastUpdate = 0;
         taskProps = props;
         pollIntervalInMillis = Long.parseLong(taskProps.get(JENKINS_POLL_INTERVAL_MS_CONFIG));
         stop = new AtomicBoolean(false);
@@ -136,23 +138,33 @@ public class JenkinsSourceTask extends SourceTask {
 
     @Override
     public List<SourceRecord> poll() throws InterruptedException {
-        logger.debug("In poll()");
-        long now = time.milliseconds();
+        logger.error("In poll()");
 
         //Keep trying in a loop until stop() is called on this instance.
         //TODO use RxJava for this in future
         while (!stop.get()) {
+            long now = time.milliseconds();
+            logger.trace("Now: {}", sdf.format(new Date(now)));
+            long nextUpdate = 0;
 
             //Check if poll time had elapsed
-            long nextUpdate = now + pollIntervalInMillis;
+            if (lastUpdate == 0) {
+                logger.trace("First call after starting the connector. So Pulling the Jobs from Jenkins now.");
+                nextUpdate = now;
+            } else {
+                nextUpdate = lastUpdate + pollIntervalInMillis;
+                logger.trace("Next pull from Jenkins should happen at {} (approx).", nextUpdate);
+            }
             long untilNext = nextUpdate - now;
-            logger.trace("Waiting {} ms to poll {} next", untilNext);
+            logger.error("now: {}, nextUpdate: {}, untilNext: {}", sdf.format(new Date(now)), sdf.format(new Date(nextUpdate)), untilNext);
+
             if (untilNext > 0) {
+                logger.debug("Waiting {} ms before next pull", untilNext);
                 time.sleep(untilNext);
-                now = time.milliseconds();
                 continue;
             }
 
+            logger.debug("Total pulls from Jenkins so far: {}", totalJenkinsPulls);
             String jobUrls = taskProps.get(JOB_URLS);
             storageAdapter = new ReadYourWritesOffsetStorageAdapter(context.offsetStorageReader(), jobUrls);
 
@@ -176,11 +188,13 @@ public class JenkinsSourceTask extends SourceTask {
                 if (sourceRecord.isPresent()) records.add(sourceRecord.get());
             }
 
+            logger.error("Total SourceRecords created: {}. Returning these from poll()", records.size());
+
             //Update the last updated time to now just before returning the call
             lastUpdate = time.milliseconds();
-            logger.trace("Setting the lastUpdate time to : {}", sdf.format(new Date(lastUpdate)));
+            logger.error("Setting the lastUpdate time to : {}", sdf.format(new Date(lastUpdate)));
 
-            logger.debug("Total SourceRecords created: {}. Returning these from poll()", records.size());
+            totalJenkinsPulls++;
             return records;
         }
 
@@ -191,7 +205,7 @@ public class JenkinsSourceTask extends SourceTask {
 
     @Override
     public synchronized void stop() {
-        logger.debug("Stopping the Task");
+        logger.info("JenkinsSourceTask stopping");
         if (stop != null) stop.set(true);
     }
 
