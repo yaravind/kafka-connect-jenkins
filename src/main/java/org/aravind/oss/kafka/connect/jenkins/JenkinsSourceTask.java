@@ -118,7 +118,7 @@ public class JenkinsSourceTask extends SourceTask {
                         if (lastBuildDetails.isPresent()) {
                             //add build details JSON string as the value
                             logger.debug("Create SourceRecord");
-                            SourceRecord record = new SourceRecord(sourcePartition, sourceOffset, taskProps.get(TOPIC_CONFIG), Schema.STRING_SCHEMA, lastBuildDetails.get());
+                            SourceRecord record = new SourceRecord(sourcePartition, sourceOffset, taskProps.get(TOPIC_CONFIG), Schema.STRING_SCHEMA, partitionValue, Schema.STRING_SCHEMA, lastBuildDetails.get());
                             return Optional.of(record);
                         } else {
                             logger.debug("Ignoring job details for {} as there are no builds for this Job. Not creating SourceRecord.", lastBuild.getBuildDetailsResource());
