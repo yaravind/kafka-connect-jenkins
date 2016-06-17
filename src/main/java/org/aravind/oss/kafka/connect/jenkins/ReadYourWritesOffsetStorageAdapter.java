@@ -36,7 +36,7 @@ public class ReadYourWritesOffsetStorageAdapter {
     private OffsetStorageReader storageReader;
 
     //task level cache
-    private Map<String, Object> lookup = new HashMap<>();
+    private Map<Map<String, String>, Map<String, Object>> lookup = new HashMap<>();
 
     //Offsets from StorageReader
     private Map<Map<String, String>, Map<String, Object>> offsets;
