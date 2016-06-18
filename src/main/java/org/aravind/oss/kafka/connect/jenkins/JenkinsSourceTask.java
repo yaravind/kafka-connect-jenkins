@@ -106,9 +106,11 @@ public class JenkinsSourceTask extends SourceTask {
 
                     //Some jobs might not have any builds. TODO need to figure out how to represent these
                     //And the lastBuild might have already been stored
+
                     if (lastBuild != null && !lastBuild.getNumber().equals(lastSavedBuildNumber)) {
-                        logger.trace("Partition: {}, lastBuild: {}, lastSavedBuild: {}", partitionValue, lastBuild.getNumber(), lastSavedBuildNumber);
-                        Map<String, Long> sourceOffset = Collections.singletonMap(BUILD_NUMBER, lastBuild.getNumber());
+                        Long offsetValue = lastBuild.getNumber();
+                        logger.trace("Partition: {}, lastBuild: {}, lastSavedBuild: {}", partitionValue, offsetValue, lastSavedBuildNumber);
+                        Map<String, Long> sourceOffset = Collections.singletonMap(BUILD_NUMBER, offsetValue);
 
                         //get Build details
                         lastBuild.setConnTimeoutInMillis(getJenkinsConnTimeout());
@@ -119,6 +121,8 @@ public class JenkinsSourceTask extends SourceTask {
                             //add build details JSON string as the value
                             logger.debug("Create SourceRecord");
                             SourceRecord record = new SourceRecord(sourcePartition, sourceOffset, taskProps.get(TOPIC_CONFIG), Schema.STRING_SCHEMA, partitionValue, Schema.STRING_SCHEMA, lastBuildDetails.get());
+                            storageAdapter.cache(partitionValue, offsetValue);
+
                             return Optional.of(record);
                         } else {
                             logger.debug("Ignoring job details for {} as there are no builds for this Job. Not creating SourceRecord.", lastBuild.getBuildDetailsResource());
@@ -138,7 +142,7 @@ public class JenkinsSourceTask extends SourceTask {
 
     @Override
     public List<SourceRecord> poll() throws InterruptedException {
-        logger.error("In poll()");
+        logger.debug("In poll()");
 
         //Keep trying in a loop until stop() is called on this instance.
         //TODO use RxJava for this in future
@@ -156,7 +160,7 @@ public class JenkinsSourceTask extends SourceTask {
                 logger.trace("Next pull from Jenkins should happen at {} (approx).", nextUpdate);
             }
             long untilNext = nextUpdate - now;
-            logger.error("now: {}, nextUpdate: {}, untilNext: {}", sdf.format(new Date(now)), sdf.format(new Date(nextUpdate)), untilNext);
+            logger.debug("now: {}, nextUpdate: {}, untilNext: {}", sdf.format(new Date(now)), sdf.format(new Date(nextUpdate)), untilNext);
 
             if (untilNext > 0) {
                 logger.debug("Waiting {} ms before next pull", untilNext);

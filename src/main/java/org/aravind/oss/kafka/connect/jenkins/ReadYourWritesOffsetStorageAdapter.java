@@ -36,9 +36,9 @@ public class ReadYourWritesOffsetStorageAdapter {
     private OffsetStorageReader storageReader;
 
     //task level cache
-    private Map<Map<String, String>, Map<String, Object>> lookup = new HashMap<>();
+    private Map<Map<String, String>, Map<String, Object>> cache = new HashMap<>();
 
-    //Offsets from StorageReader
+    //task level offsets from StorageReader
     private Map<Map<String, String>, Map<String, Object>> offsets;
 
     private static final Logger logger = LoggerFactory.getLogger(ReadYourWritesOffsetStorageAdapter.class);
@@ -49,12 +49,31 @@ public class ReadYourWritesOffsetStorageAdapter {
         logger.debug("Loaded offsets: {}", offsets);
     }
 
+    public void cache(String jobName, Object buildNumber) {
+        Map<String, String> key = Collections.singletonMap(JenkinsSourceTask.JOB_NAME, jobName);
+        Map<String, Object> value = Collections.singletonMap(JenkinsSourceTask.BUILD_NUMBER, buildNumber);
+
+        cache.put(key, value);
+    }
+
     public boolean containsPartition(String partitionValue) {
-        return offsets.keySet().contains(Collections.singletonMap(JenkinsSourceTask.JOB_NAME, partitionValue));
+        Map<String, String> key = Collections.singletonMap(JenkinsSourceTask.JOB_NAME, partitionValue);
+        if (offsets.keySet().contains(key)) {
+            return true;
+        } else {
+            logger.error("Didn't find the key {} in offset storage", key);
+            return cache.containsKey(key);
+        }
     }
 
     public Optional<Map<String, Object>> getOffset(String partitionValue) {
-        return Optional.ofNullable(offsets.get(Collections.singletonMap(JenkinsSourceTask.JOB_NAME, partitionValue)));
+        Map<String, String> key = Collections.singletonMap(JenkinsSourceTask.JOB_NAME, partitionValue);
+        if (offsets.get(key) != null) {
+            return Optional.of(offsets.get(key));
+        } else {
+            logger.error("Didn't find the key {} in offset storage so trying from cache", key);
+            return Optional.ofNullable(cache.get(key));
+        }
     }
 
     private Map<Map<String, String>, Map<String, Object>> loadAndGetOffsets(OffsetStorageReader reader, String jobUrls) {
