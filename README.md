@@ -23,6 +23,93 @@ We will use Apache Jenkins REST API to demonstrate an example.
 |-----------|---------|
 | Get list of all Jobs:<br/> https://builds.apache.org/api/json <br/><br/> GET **lastBuild** of `Abdera-trunk` Job:<br/> https://builds.apache.org/job/Abdera-trunk/api/json <br/><br/> GET BuildDetails for build `2546` of job `Abdera-trunk`:<br/> https://builds.apache.org/job/Abdera-trunk/2546/api/json | ![](https://github.com/yaravind/kafka-connect-jenkins/blob/master/src/site/resources/images/jenkins-resource-relationships.png) |
 
+**What gets published to the topic?**
+
+The BuildDetails JSON event is persisted to the topic. Below is the sample event
+
+```
+{
+    "actions": [
+        {
+            "causes": [
+                {
+                    "shortDescription": "Started by an SCM change"
+                }
+            ]
+        },
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {
+            "failCount": 0,
+            "skipCount": 1,
+            "totalCount": 491,
+            "urlName": "testReport"
+        },
+        {},
+        {}
+    ],
+    "artifacts": [],
+    "building": false,
+    "description": null,
+    "displayName": "#2546",
+    "duration": 480582,
+    "estimatedDuration": 457794,
+    "executor": null,
+    "fullDisplayName": "Abdera-trunk #2546",
+    "id": "2015-08-25_22-08-43",
+    "keepLog": false,
+    "number": 2546,
+    "queueId": -1,
+    "result": "SUCCESS",
+    "timestamp": 1440540523000,
+    "url": "https://builds.apache.org/job/Abdera-trunk/2546/",
+    "builtOn": "jenkins-ubuntu-1404-4gb-c51",
+    "changeSet": {
+        "items": [
+            {
+                "affectedPaths": [
+                    "client/src/test/java/org/apache/abdera/test/client/util/MultipartRelatedRequestEntityTest.java"
+                ],
+                "author": {
+                    "absoluteUrl": "https://builds.apache.org/user/veithen",
+                    "fullName": "veithen"
+                },
+                "commitId": "1697770",
+                "timestamp": 1440537458260,
+                "date": "2015-08-25T21:17:38.260515Z",
+                "msg": "Use factory to create FOMEntry instance.",
+                "paths": [
+                    {
+                        "editType": "edit",
+                        "file": "/abdera/java/trunk/client/src/test/java/org/apache/abdera/test/client/util/MultipartRelatedRequestEntityTest.java"
+                    }
+                ],
+                "revision": 1697770,
+                "user": "veithen"
+            }
+        ],
+        "kind": "svn",
+        "revisions": [
+            {
+                "module": "https://svn.apache.org/repos/asf/abdera/java/trunk",
+                "revision": 1697770
+            }
+        ]
+    },
+    "culprits": [
+        {
+            "absoluteUrl": "https://builds.apache.org/user/veithen",
+            "fullName": "veithen"
+        }
+    ],
+    "mavenArtifacts": {},
+    "mavenVersionUsed": "3.0.4"
+}
+```
 
 ## What can I do with it?
 
