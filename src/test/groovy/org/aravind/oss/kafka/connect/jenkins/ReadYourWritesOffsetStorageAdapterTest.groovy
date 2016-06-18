@@ -1,6 +1,9 @@
 package org.aravind.oss.kafka.connect.jenkins
 
 import org.apache.kafka.connect.storage.OffsetStorageReader
+import org.aravind.oss.kafka.connect.lib.SourceOffset
+import org.aravind.oss.kafka.connect.lib.Partitions
+import org.aravind.oss.kafka.connect.lib.SourcePartition
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -9,6 +12,9 @@ import spock.lang.Specification
  * @since 0.5.0
  */
 class ReadYourWritesOffsetStorageAdapterTest extends Specification {
+
+    @Shared
+    def Partitions partitions = new Partitions(JenkinsSourceTask.JOB_NAME)
 
     @Shared
     def OffsetStorageReader storageReader = Mock()
@@ -24,45 +30,45 @@ class ReadYourWritesOffsetStorageAdapterTest extends Specification {
         offsets.put(['jobName': 'Hadoop-Trunk'], ['buildNumber': '14'])
 
         storageReader.offsets(_) >> offsets
-        adapter = new ReadYourWritesOffsetStorageAdapter(storageReader, 'Abdera-Trunk', null)
+        adapter = new ReadYourWritesOffsetStorageAdapter(storageReader, 'Abdera-Trunk', partitions)
     }
 
     def "containsPartition"() {
         when:
-        Optional<Map<String, Object>> result = adapter.getOffset('Abdera-Trunk')
+        def result = adapter.containsPartition(partitions.make('Abdera-Trunk'))
 
         then:
-        result.isPresent() == true
-        result.get() == ['buildNumber': '72']
+        result == true
     }
 
     def "getOffset - kay exists in offsets read from OffsetStorageReader"() {
         when:
-        Optional<Map<String, Object>> result = adapter.getOffset('Abdera-Trunk')
+        Optional<SourceOffset> result = adapter.getOffset(partitions.make('Abdera-Trunk'))
 
         then:
-        result.get() == ['buildNumber': '72']
+        result.get().encoded == ['buildNumber': '72']
     }
 
     def "getOffset - if key doesn't exist in offsets then read from cache"() {
         given: "the current offsets aren't yet flushed"
-        Optional<Map<String, Object>> result = adapter.getOffset('NonExistingJob-Trunk')
+        SourcePartition p = partitions.make('NonExistingJob-Trunk')
+        Optional<SourceOffset> result = adapter.getOffset(p)
         result.isPresent() == false
 
         when: "we create a new SourceRecord for the new build"
         String partitionValue = 'NonExistingJob-Trunk'
         Object offsetValue = '272'
 
-        adapter.cache(partitionValue, offsetValue)
+        adapter.cache(p, SourceOffset.make(JenkinsSourceTask.BUILD_NUMBER, offsetValue))
 
         then:
-        adapter.containsPartition('NonExistingJob-Trunk') == true
-        adapter.getOffset('NonExistingJob-Trunk').isPresent() == true
+        adapter.containsPartition(p) == true
+        adapter.getOffset(p).isPresent() == true
     }
 
-    def "getOffset should return no result for non existing partitions"() {
+    def "getOffset - should return no result for non existing partitions"() {
         when:
-        Optional<Map<String, Object>> result = adapter.getOffset('NonExistingJob1-Trunk')
+        Optional<SourceOffset> result = adapter.getOffset(partitions.make('NonExistingJob1-Trunk'))
 
         then:
         result.isPresent() == false

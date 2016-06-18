@@ -1,6 +1,7 @@
 package org.aravind.oss.kafka.connect.jenkins;
 
 import org.apache.kafka.connect.storage.OffsetStorageReader;
+import org.aravind.oss.kafka.connect.lib.SourceOffset;
 import org.aravind.oss.kafka.connect.lib.Partitions;
 import org.aravind.oss.kafka.connect.lib.SourcePartition;
 import org.slf4j.Logger;
@@ -40,7 +41,7 @@ public class ReadYourWritesOffsetStorageAdapter {
     private final Partitions partitions;
 
     //task level cache
-    private Map<Map<String, String>, Map<String, Object>> cache = new HashMap<>();
+    private Map<Map<String, ?>, Map<String, Object>> cache = new HashMap<>();
 
     //task level offsets from StorageReader
     private Map<Map<String, String>, Map<String, Object>> offsets;
@@ -54,39 +55,28 @@ public class ReadYourWritesOffsetStorageAdapter {
         logger.debug("Loaded offsets: {}", offsets);
     }
 
-    public void cache(String jobName, Object buildNumber) {
-        Map<String, String> key = Collections.singletonMap(JenkinsSourceTask.JOB_NAME, jobName);
-        Map<String, Object> value = Collections.singletonMap(JenkinsSourceTask.BUILD_NUMBER, buildNumber);
+    public void cache(SourcePartition p, SourceOffset o) {
+        Map<String, ?> key = p.encoded;
+        Map<String, Object> value = o.encoded;
 
         cache.put(key, value);
     }
 
-    public boolean containsPartition(String partitionValue) {
-        Map<String, String> key = Collections.singletonMap(JenkinsSourceTask.JOB_NAME, partitionValue);
-        if (offsets.keySet().contains(key)) {
+    public boolean containsPartition(SourcePartition partition) {
+        if (offsets.keySet().contains(partition.encoded)) {
             return true;
         } else {
-            logger.error("Didn't find the key {} in offset storage", key);
-            return cache.containsKey(key);
+            logger.error("Didn't find the key {} in offset storage", partition.encoded);
+            return cache.containsKey(partition.encoded);
         }
     }
 
-    public Optional<Map<String, Object>> getOffset(String partitionValue) {
-        Map<String, String> key = Collections.singletonMap(JenkinsSourceTask.JOB_NAME, partitionValue);
-        if (offsets.get(key) != null) {
-            return Optional.of(offsets.get(key));
-        } else {
-            logger.error("Didn't find the key {} in offset storage so trying from cache", key);
-            return Optional.ofNullable(cache.get(key));
-        }
-    }
-
-    public Optional<Map<String, Object>> getOffset(SourcePartition partition) {
-        if (offsets.get(partition.key) != null) {
-            return Optional.of(offsets.get(partition.encoded));
+    public Optional<SourceOffset> getOffset(SourcePartition partition) {
+        if (offsets.get(partition.encoded) != null) {
+            return Optional.of(SourceOffset.decode(offsets.get(partition.encoded)));
         } else {
             logger.error("Didn't find the key {} in offset storage so trying from cache", partition.key);
-            return Optional.ofNullable(cache.get(partition.encoded));
+            return Optional.ofNullable(SourceOffset.decode(cache.get(partition.encoded)));
         }
     }
 

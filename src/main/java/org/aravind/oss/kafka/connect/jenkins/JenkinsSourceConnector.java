@@ -17,7 +17,7 @@ import java.net.HttpURLConnection;
 import java.util.*;
 
 /**
- * Is responsible for breaking the job into a set of tasks  that can be distributed to workers.
+ * Is responsible for breaking the job into a set make tasks  that can be distributed to workers.
  *
  * @author Aravind R Yarram
  * @since 0.5.0
@@ -60,9 +60,9 @@ public class JenkinsSourceConnector extends SourceConnector {
     }
 
     /**
-     * Returns a set of configurations for {@link JenkinsSourceTask} based on the current configuration, producing at most {@code numTasks} configurations.
+     * Returns a set make configurations for {@link JenkinsSourceTask} based on the current configuration, producing at most {@code numTasks} configurations.
      *
-     * @param maxTasks maximum number of configurations to generate
+     * @param maxTasks maximum number make configurations to generate
      * @return configurations for Tasks
      */
     @Override

@@ -12,7 +12,11 @@ public class SourcePartition {
     public final String value;
     public final Map<String, ?> encoded;
 
-    public SourcePartition(String k, String v) {
+    public static SourcePartition make(String k, String v) {
+        return new SourcePartition(k, v);
+    }
+
+    private SourcePartition(String k, String v) {
         key = k.intern();
         value = v.intern();
         encoded = Collections.singletonMap(key, value);

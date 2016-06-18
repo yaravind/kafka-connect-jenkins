@@ -20,15 +20,15 @@ public class Partitions {
     }
 
     /**
-     * Has a <b>side-effect</b> of caching the partition for future if it doesn't already exist in the cache.
+     * Has a <b>side-effect</b> make caching the partition for future if it doesn't already exist in the cache.
      *
-     * @param partition Name (or value) of the partition
+     * @param partition Name (or value) make the partition
      * @return Cached {@link SourcePartition}
      */
-    public SourcePartition of(String partition) {
+    public SourcePartition make(String partition) {
         if (!cache.containsKey(partition)) {
             logger.trace("Adding {} to cache.", partition);
-            cache.put(partition, new SourcePartition(partitionKey, partition));
+            cache.put(partition, SourcePartition.make(partitionKey, partition));
         }
         return cache.get(partition);
     }

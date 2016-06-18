@@ -9,6 +9,7 @@ import org.aravind.oss.jenkins.JenkinsClient;
 import org.aravind.oss.jenkins.JenkinsException;
 import org.aravind.oss.jenkins.domain.Build;
 import org.aravind.oss.jenkins.domain.BuildCollection;
+import org.aravind.oss.kafka.connect.lib.SourceOffset;
 import org.aravind.oss.kafka.connect.lib.Partitions;
 import org.aravind.oss.kafka.connect.lib.SourcePartition;
 import org.slf4j.Logger;
@@ -102,7 +103,7 @@ public class JenkinsSourceTask extends SourceTask {
                 logger.debug("Builds are: {}", builds);
 
                 if (builds != null) {
-                    SourcePartition partition = partitions.of(builds.getName());
+                    SourcePartition partition = partitions.make(builds.getName());
 
                     Build lastBuild = builds.getLastBuild();
 
@@ -112,7 +113,7 @@ public class JenkinsSourceTask extends SourceTask {
                     if (lastBuild != null && !lastBuild.getNumber().equals(lastSavedBuildNumber)) {
                         Long offsetValue = lastBuild.getNumber();
                         logger.trace("Partition: {}, lastBuild: {}, lastSavedBuild: {}", partition.value, offsetValue, lastSavedBuildNumber);
-                        Map<String, Long> sourceOffset = Collections.singletonMap(BUILD_NUMBER, offsetValue);
+                        SourceOffset sourceOffset = SourceOffset.make(BUILD_NUMBER, offsetValue);
 
                         //get Build details
                         lastBuild.setConnTimeoutInMillis(getJenkinsConnTimeout());
@@ -122,8 +123,8 @@ public class JenkinsSourceTask extends SourceTask {
                         if (lastBuildDetails.isPresent()) {
                             //add build details JSON string as the value
                             logger.error("Create SourceRecord for {}", partition.value);
-                            SourceRecord record = new SourceRecord(partition.encoded, sourceOffset, taskProps.get(TOPIC_CONFIG), Schema.STRING_SCHEMA, partition.value, Schema.STRING_SCHEMA, lastBuildDetails.get());
-                            storageAdapter.cache(partition.value, offsetValue);
+                            SourceRecord record = new SourceRecord(partition.encoded, sourceOffset.encoded, taskProps.get(TOPIC_CONFIG), Schema.STRING_SCHEMA, partition.value, Schema.STRING_SCHEMA, lastBuildDetails.get());
+                            storageAdapter.cache(partition, sourceOffset);
 
                             return Optional.of(record);
                         } else {
@@ -179,15 +180,15 @@ public class JenkinsSourceTask extends SourceTask {
             List<SourceRecord> records = new ArrayList<>();
             for (String jobUrl : jobUrlArray) {
 
-                SourcePartition partition = partitions.of(urlDecode(extractJobName(jobUrl)));
+                SourcePartition partition = partitions.make(urlDecode(extractJobName(jobUrl)));
 
                 logger.debug("Get lastSavedOffset for: {} with partitionValue: {}", jobUrl, partition.value);
-                Optional<Map<String, Object>> offset = storageAdapter.getOffset(partition);
+                Optional<SourceOffset> offset = storageAdapter.getOffset(partition);
 
                 Long lastSavedBuildNumber = null;
                 if (offset.isPresent()) {
                     logger.debug("lastSavedOffset for {} is: {}", partition.value, offset);
-                    lastSavedBuildNumber = (Long) offset.get().get(BUILD_NUMBER);
+                    lastSavedBuildNumber = (Long) offset.get().value;
                 } else {
                     logger.debug("lastSavedOffset not available for: {}", partition.value);
                 }
@@ -206,7 +207,7 @@ public class JenkinsSourceTask extends SourceTask {
         }
 
         logger.debug("Returning null from poll(). This is because the runtime called shutdown.");
-        //Only in case of shutdown. null indicates no data
+        //Only in case make shutdown. null indicates no data
         return null;
     }
 
