@@ -9,6 +9,8 @@ import org.aravind.oss.jenkins.JenkinsClient;
 import org.aravind.oss.jenkins.JenkinsException;
 import org.aravind.oss.jenkins.domain.Build;
 import org.aravind.oss.jenkins.domain.BuildCollection;
+import org.aravind.oss.kafka.connect.lib.Partitions;
+import org.aravind.oss.kafka.connect.lib.SourcePartition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,6 +45,7 @@ public class JenkinsSourceTask extends SourceTask {
     private long pollIntervalInMillis;
     private static int totalJenkinsPulls = 1;
     private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+    private final static Partitions partitions = new Partitions(JenkinsSourceTask.JOB_NAME);
 
     private Map<String, String> taskProps;
     private ObjectMapper mapper = new ObjectMapper();
@@ -99,8 +102,7 @@ public class JenkinsSourceTask extends SourceTask {
                 logger.debug("Builds are: {}", builds);
 
                 if (builds != null) {
-                    String partitionValue = builds.getName();
-                    Map<String, String> sourcePartition = Collections.singletonMap(JOB_NAME, partitionValue);
+                    SourcePartition partition = partitions.of(builds.getName());
 
                     Build lastBuild = builds.getLastBuild();
 
@@ -109,7 +111,7 @@ public class JenkinsSourceTask extends SourceTask {
 
                     if (lastBuild != null && !lastBuild.getNumber().equals(lastSavedBuildNumber)) {
                         Long offsetValue = lastBuild.getNumber();
-                        logger.trace("Partition: {}, lastBuild: {}, lastSavedBuild: {}", partitionValue, offsetValue, lastSavedBuildNumber);
+                        logger.trace("Partition: {}, lastBuild: {}, lastSavedBuild: {}", partition.value, offsetValue, lastSavedBuildNumber);
                         Map<String, Long> sourceOffset = Collections.singletonMap(BUILD_NUMBER, offsetValue);
 
                         //get Build details
@@ -119,9 +121,9 @@ public class JenkinsSourceTask extends SourceTask {
 
                         if (lastBuildDetails.isPresent()) {
                             //add build details JSON string as the value
-                            logger.error("Create SourceRecord for {}", partitionValue);
-                            SourceRecord record = new SourceRecord(sourcePartition, sourceOffset, taskProps.get(TOPIC_CONFIG), Schema.STRING_SCHEMA, partitionValue, Schema.STRING_SCHEMA, lastBuildDetails.get());
-                            storageAdapter.cache(partitionValue, offsetValue);
+                            logger.error("Create SourceRecord for {}", partition.value);
+                            SourceRecord record = new SourceRecord(partition.encoded, sourceOffset, taskProps.get(TOPIC_CONFIG), Schema.STRING_SCHEMA, partition.value, Schema.STRING_SCHEMA, lastBuildDetails.get());
+                            storageAdapter.cache(partition.value, offsetValue);
 
                             return Optional.of(record);
                         } else {
@@ -170,23 +172,24 @@ public class JenkinsSourceTask extends SourceTask {
 
             logger.debug("Total pulls from Jenkins so far: {}", totalJenkinsPulls);
             String jobUrls = taskProps.get(JOB_URLS);
-            storageAdapter = new ReadYourWritesOffsetStorageAdapter(context.offsetStorageReader(), jobUrls);
+            storageAdapter = new ReadYourWritesOffsetStorageAdapter(context.offsetStorageReader(), jobUrls, partitions);
 
             String[] jobUrlArray = jobUrls.split(",");
 
             List<SourceRecord> records = new ArrayList<>();
             for (String jobUrl : jobUrlArray) {
-                String partitionValue = urlDecode(extractJobName(jobUrl));
 
-                logger.debug("Get lastSavedOffset for {} with partitionValue as {}", jobUrl, partitionValue);
-                Optional<Map<String, Object>> offset = storageAdapter.getOffset(partitionValue);
+                SourcePartition partition = partitions.of(urlDecode(extractJobName(jobUrl)));
+
+                logger.debug("Get lastSavedOffset for: {} with partitionValue: {}", jobUrl, partition.value);
+                Optional<Map<String, Object>> offset = storageAdapter.getOffset(partition);
 
                 Long lastSavedBuildNumber = null;
                 if (offset.isPresent()) {
-                    logger.debug("lastSavedOffset for {} is {}", partitionValue, offset);
+                    logger.debug("lastSavedOffset for {} is: {}", partition.value, offset);
                     lastSavedBuildNumber = (Long) offset.get().get(BUILD_NUMBER);
                 } else {
-                    logger.debug("lastSavedOffset not available for: {}", partitionValue);
+                    logger.debug("lastSavedOffset not available for: {}", partition.value);
                 }
                 Optional<SourceRecord> sourceRecord = createSourceRecord(jobUrl, lastSavedBuildNumber);
                 if (sourceRecord.isPresent()) records.add(sourceRecord.get());

@@ -1,6 +1,6 @@
 package org.aravind.oss.kafka.connect.lib;
 
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -8,11 +8,14 @@ import java.util.Map;
  * @since 0.5.0
  */
 public class SourcePartition {
-    private final String key;
-    private final String value;
+    public final String key;
+    public final String value;
+    public final Map<String, ?> encoded;
 
     public SourcePartition(String k, String v) {
         key = k.intern();
         value = v.intern();
+        encoded = Collections.singletonMap(key, value);
     }
+
 }
