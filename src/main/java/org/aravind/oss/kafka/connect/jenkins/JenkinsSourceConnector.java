@@ -4,17 +4,17 @@ import org.apache.kafka.common.config.ConfigDef;
 import org.apache.kafka.connect.connector.Task;
 import org.apache.kafka.connect.errors.ConnectException;
 import org.apache.kafka.connect.source.SourceConnector;
-import org.apache.kafka.connect.util.ConnectorUtils;
 import org.aravind.oss.jenkins.JenkinsException;
 import org.aravind.oss.jenkins.JenkinsClient;
 import org.aravind.oss.jenkins.domain.Jenkins;
 import org.aravind.oss.jenkins.domain.Job;
+import org.aravind.oss.kafka.connect.lib.TaskConfigBuilder;
+import org.aravind.oss.kafka.connect.lib.TaskConfigExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.HttpURLConnection;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Is responsible for breaking the job into a set of tasks  that can be distributed to workers.

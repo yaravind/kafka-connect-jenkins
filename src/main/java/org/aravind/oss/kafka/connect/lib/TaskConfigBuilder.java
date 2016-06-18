@@ -1,4 +1,4 @@
-package org.aravind.oss.kafka.connect.jenkins;
+package org.aravind.oss.kafka.connect.lib;
 
 import org.apache.kafka.common.config.AbstractConfig;
 import org.apache.kafka.connect.source.SourceTask;

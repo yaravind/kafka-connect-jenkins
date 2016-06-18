@@ -1,6 +1,7 @@
 package org.aravind.oss.kafka.connect.jenkins;
 
 import org.aravind.oss.jenkins.domain.Job;
+import org.aravind.oss.kafka.connect.lib.TaskConfigExtractor;
 
 /**
  * @author Aravind R Yarram
