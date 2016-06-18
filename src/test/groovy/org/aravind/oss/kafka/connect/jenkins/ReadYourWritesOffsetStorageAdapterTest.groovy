@@ -1,7 +1,6 @@
 package org.aravind.oss.kafka.connect.jenkins
 
 import org.apache.kafka.connect.storage.OffsetStorageReader
-import org.junit.Before
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -25,7 +24,7 @@ class ReadYourWritesOffsetStorageAdapterTest extends Specification {
         offsets.put(['jobName': 'Hadoop-Trunk'], ['buildNumber': '14'])
 
         storageReader.offsets(_) >> offsets
-        adapter = new ReadYourWritesOffsetStorageAdapter(storageReader, 'Abdera-Trunk')
+        adapter = new ReadYourWritesOffsetStorageAdapter(storageReader, 'Abdera-Trunk', null)
     }
 
     def "containsPartition"() {

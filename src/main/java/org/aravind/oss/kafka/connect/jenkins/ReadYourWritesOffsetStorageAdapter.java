@@ -1,6 +1,8 @@
 package org.aravind.oss.kafka.connect.jenkins;
 
 import org.apache.kafka.connect.storage.OffsetStorageReader;
+import org.aravind.oss.kafka.connect.lib.Partitions;
+import org.aravind.oss.kafka.connect.lib.SourcePartition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,6 +37,8 @@ public class ReadYourWritesOffsetStorageAdapter {
 
     private OffsetStorageReader storageReader;
 
+    private final Partitions partitions;
+
     //task level cache
     private Map<Map<String, String>, Map<String, Object>> cache = new HashMap<>();
 
@@ -43,8 +47,9 @@ public class ReadYourWritesOffsetStorageAdapter {
 
     private static final Logger logger = LoggerFactory.getLogger(ReadYourWritesOffsetStorageAdapter.class);
 
-    public ReadYourWritesOffsetStorageAdapter(OffsetStorageReader reader, String jobUrls) {
+    public ReadYourWritesOffsetStorageAdapter(OffsetStorageReader reader, String jobUrls, Partitions ps) {
         storageReader = reader;
+        partitions = ps;
         offsets = loadAndGetOffsets(storageReader, jobUrls);
         logger.debug("Loaded offsets: {}", offsets);
     }
@@ -73,6 +78,15 @@ public class ReadYourWritesOffsetStorageAdapter {
         } else {
             logger.error("Didn't find the key {} in offset storage so trying from cache", key);
             return Optional.ofNullable(cache.get(key));
+        }
+    }
+
+    public Optional<Map<String, Object>> getOffset(SourcePartition partition) {
+        if (offsets.get(partition.key) != null) {
+            return Optional.of(offsets.get(partition.encoded));
+        } else {
+            logger.error("Didn't find the key {} in offset storage so trying from cache", partition.key);
+            return Optional.ofNullable(cache.get(partition.encoded));
         }
     }
 
