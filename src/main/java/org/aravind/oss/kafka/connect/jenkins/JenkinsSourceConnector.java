@@ -76,32 +76,14 @@ public class JenkinsSourceConnector extends SourceConnector {
             logger.warn("Error while GET to " + jenkinsCfg.getJobsResource() + ". Ignoring it.", e);
         }
 
+        TaskConfigExtractor taskConfigExtractor = new JobTaskConfigExtractor();
+
         if (resp.isPresent()) {
             Jenkins jenkins = resp.get();
 
-            //Create job groups
-            int jobsCount = jenkins.getJobs().size();
-            int numGroups = Math.min(jobsCount, maxTasks);
-            logger.debug("Total jobs: {}. maxTasks: {}. Number of taskGroups created: {}.", jobsCount, maxTasks, numGroups);
-            List<List<Job>> jobGroups = ConnectorUtils.groupPartitions(jenkins.getJobs(), numGroups);
+            TaskConfigBuilder<Job> taskCfgBuilder = new TaskConfigBuilder<Job>(maxTasks, JenkinsSourceTask.JOB_URLS, jenkinsCfg, taskConfigExtractor);
 
-            //Create task configs for each group
-            List<Map<String, String>> taskConfigs = new ArrayList<>(jobGroups.size());
-
-            for (List<Job> group : jobGroups) {
-                //Forward the config from connector to SourceTask so that they have access to the configured TOPIC NAME
-                Map<String, String> taskProps = new HashMap<>(jenkinsCfg.originalsStrings());
-
-                //Concatenate all job urls that need to be handled by a single task
-                String commaSeparatedJobUrls = group.stream()
-                        .map(j -> j.getUrl())
-                        .collect(Collectors.joining(","));
-
-                taskProps.put(JenkinsSourceTask.JOB_URLS, commaSeparatedJobUrls);
-                logger.trace("taskProps: {}", taskProps);
-                taskConfigs.add(taskProps);
-            }
-            return taskConfigs;
+            return taskCfgBuilder.build(jenkins.getJobs());
         }
         return Collections.emptyList();
     }
