@@ -120,7 +120,7 @@ transactional or master data. [Here are some use-cases](https://github.com/yarav
 
 ## How to use it?
 
-### Standlone mode
+### Standalone mode
 
 While testing, you might want to run the connector in standalone mode. Follow these steps
 
