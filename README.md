@@ -136,7 +136,7 @@ While testing, you might want to run the connector in standalone mode. Follow th
    
 > If you need to proxy to connect to Jenkins then append these to the above command `-Dhttp.proxyHost=... -Dhttp.proxyPort=... -Dhttps.proxyHost=... -Dhttps.proxyPort=...`
 
-> You can enable the logging for this connector by adding `log4j.logger.org.aravind.oss=DEBUG` (TRACE) to `connect-log4j.properties`
+> You can enable the logging for the connector by adding `log4j.logger.org.aravind.oss=DEBUG` (TRACE) to `connect-log4j.properties`
 
 ### Dependencies
 
