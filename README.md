@@ -25,7 +25,7 @@ We will use Apache Jenkins REST API to demonstrate an example.
 
 **What gets published to the topic?**
 
-The BuildDetails JSON event is persisted to the topic. Below is the sample event
+The BuildDetails JSON event is persisted to the topic. Below is the content of a sample event
 
 ```
 {
@@ -136,7 +136,15 @@ While testing, you might want to run the connector in standalone mode. Follow th
    
 > If you need to proxy to connect to Jenkins then append these to the above command `-Dhttp.proxyHost=... -Dhttp.proxyPort=... -Dhttps.proxyHost=... -Dhttps.proxyPort=...`
 
-> You can enable the logging for the connector by adding `log4j.logger.org.aravind.oss=DEBUG` (TRACE) to `connect-log4j.properties`
+### Logging
+
+You can enable the logging for the connector by adding `log4j.logger.org.aravind.oss=DEBUG` (TRACE) to `connect-log4j.properties`. 
+
+| Intent | Configuration (`DEBUG` or `TRACE`) |
+|--|
+| Enable logging for Jenkins **Source Connector** only  | `log4j.logger.org.aravind.oss.kafka.connect.jenkins.JenkinsSourceConnector=DEBUG`<br/>`log4j.logger.org.aravind.oss.kafka.connect.lib.TaskConfigBuilder=DEBUG` |
+| Enable logging for Jenkins **Source Task** only | `log4j.logger.org.aravind.oss.kafka.connect.jenkins.JenkinsSourceTask=DEBUG`<br/>`log4j.logger.org.aravind.oss.kafka.connect.jenkins.ReadYourWritesOffsetStorageAdapter=ERROR`<br/>`log4j.logger.org.aravind.oss.kafka.connect.lib.Partitions=DEBUG`|
+| Enable logging for communication with Jenkins API only | `log4j.logger.org.aravind.oss.jenkins.JenkinsClient=TRACE` |
 
 ### Dependencies
 
