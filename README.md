@@ -173,6 +173,11 @@ You can enable the logging for the connector by adding `log4j.logger.org.aravind
 | `http://localhost:8083/connectors/kafka-jenkins-source-connector/config` | JenkinsSourceConnector config |
 | `http://localhost:8083/connectors/kafka-jenkins-source-connector/tasks` | JenkinsSourceConnector tasks |
 
+## Limitations
+
+- Saves only the most recent build (**lastBuild**) know after configured `jenkins.pollIntervalInMillis`. i.e. if a Job has been built multiple times within the poll intervals, it isn't accounted for.
+- Required JDK 8 to run the connector. Making JDK 7 compatible version isn't a big deal. Raise an issue if you need one.
+
 ## Contribute
 
 - Source code: https://github.com/yaravind/kafka-connect-jenkins
