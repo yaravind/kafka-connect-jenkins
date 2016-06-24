@@ -15,6 +15,14 @@ kafka-connect-jenkins is a [Kafka Connector](http://kafka.apache.org/0100/docume
     | Server +--------> |  Job  +-------> | Build +--------> | BuildDetails |
     +--------+          +-------+         +-------+          +--------------+
 
+The following comparison might give you more insight.
+
+| Example | Input Partitions (Logical) | Records | Offsets/Position |
+| ------- | -------------------------- | ------- | ---------------- |
+| Set of files | each File | each Line | line Number within a file  |
+| Database instance | each Table | each Row | primary id + timestamp |
+| Jenkins Server | each Job | BuildDetails of each Build (**lastBuild**) | build number of **lastBuild**|
+
 ### Example
 
 We will use Apache Jenkins REST API to demonstrate an example.
@@ -25,7 +33,7 @@ We will use Apache Jenkins REST API to demonstrate an example.
 
 **What gets published to the topic?**
 
-The BuildDetails JSON event is persisted to the topic. Below is the content of a sample event
+The BuildDetails is treated as an event and is persisted to the topic in JSON format. Below is the content of a sample event
 
 ```
 {
@@ -176,7 +184,7 @@ You can enable the logging for the connector by adding `log4j.logger.org.aravind
 ## Limitations
 
 - Saves only the most recent build (**lastBuild**) know after configured `jenkins.pollIntervalInMillis`. i.e. if a Job has been built multiple times within the poll intervals, it isn't accounted for.
-- Required JDK 8 to run the connector. Making JDK 7 compatible version isn't a big deal. Raise an issue if you need one.
+- Requires JDK 8 to run the connector. Making JDK 7 compatible version isn't a big deal. Raise an issue if you need one.
 
 ## Contribute
 
