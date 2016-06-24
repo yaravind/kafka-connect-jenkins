@@ -3,7 +3,7 @@
 
 # Kafka Connect Jenkins
 
-Kafka Connect Connector for [Jenkins](https://jenkins.io/) Open Source Continuous Integration Tool. **The connector is currently under development. Hoping to release the Beta version sometime in July. Contributions welcome!**
+Kafka Connect Connector for [Jenkins](https://jenkins.io/) Open Source Continuous Integration Tool. **The connector is currently in ALPHA release. Looking for early adopters.**
 
 ## What is it?
 
@@ -126,7 +126,7 @@ and deployments of various components or services. We usually see each business 
 their own Jenkins instance. Any such organization can benefit from treating **build events** same like any other
 transactional or master data. [Here are some use-cases](https://github.com/yaravind/kafka-connect-jenkins/wiki/Use-cases) that these **build events** can enable.
 
-### Configurations
+## Configurations
 
 | Property | Description | Required? | Default value | 
 |----------|-------------|------------|---------------|
@@ -186,11 +186,6 @@ You can enable the logging for the connector by adding `log4j.logger.org.aravind
 - Saves only the most recent build (**lastBuild**) know after configured `jenkins.pollIntervalInMillis`. i.e. if a Job has been built multiple times within the poll intervals, it isn't accounted for.
 - Requires JDK 8 to run the connector. Making JDK 7 compatible version isn't a big deal. Raise an issue if you need one.
 
-## Contribute
-
-- Source code: https://github.com/yaravind/kafka-connect-jenkins
-- Issue tracker: https://github.com/yaravind/kafka-connect-jenkins/issues
-
 ### Dependencies
 
 - Maven 3.x
@@ -199,6 +194,11 @@ You can enable the logging for the connector by adding `log4j.logger.org.aravind
 - [Snap CI](https://snap-ci.com/yaravind/kafka-connect-jenkins/branch/master) for Continuous Integration
 - [JaCoCo](https://github.com/jacoco/jacoco) and [Coveralls](https://coveralls.io/github/yaravind/kafka-connect-jenkins) for code coverage
 - [Codacy](https://www.codacy.com/app/yaravind/kafka-connect-jenkins/dashboard) to measure code quality
+
+## Contribute
+
+- Source code: https://github.com/yaravind/kafka-connect-jenkins
+- Issue tracker: https://github.com/yaravind/kafka-connect-jenkins/issues
 
 ## License
 
