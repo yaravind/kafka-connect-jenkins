@@ -51,4 +51,13 @@ public class SourceOffset {
         result = 31 * result + value.hashCode();
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "SourceOffset{" +
+                "key='" + key + '\'' +
+                ", value=" + value +
+                ", encoded=" + encoded +
+                '}';
+    }
 }

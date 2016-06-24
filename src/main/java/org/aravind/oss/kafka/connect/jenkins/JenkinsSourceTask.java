@@ -182,12 +182,12 @@ public class JenkinsSourceTask extends SourceTask {
 
                 SourcePartition partition = partitions.make(urlDecode(extractJobName(jobUrl)));
 
-                logger.trace("Get lastSavedOffset for: {} with partitionValue: {}", jobUrl, partition.value);
+                logger.trace("Get lastSavedOffset for: '{}' with partitionValue: {}", jobUrl, partition.value);
                 Optional<SourceOffset> offset = storageAdapter.getOffset(partition);
 
                 Long lastSavedBuildNumber = null;
                 if (offset.isPresent()) {
-                    logger.debug("lastSavedOffset for {} is: {}", partition.value, offset.get());
+                    logger.debug("lastSavedOffset for '{}' is: {}", partition.value, offset.get());
                     lastSavedBuildNumber = (Long) offset.get().value;
                 } else {
                     logger.debug("lastSavedOffset not available for: {}", partition.value);

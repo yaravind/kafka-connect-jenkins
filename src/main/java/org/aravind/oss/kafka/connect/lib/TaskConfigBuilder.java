@@ -53,7 +53,6 @@ public class TaskConfigBuilder<T> {
      * @return The task configuration for each of the tasks
      */
     public List<Map<String, String>> build(List<T> work) {
-
         //Create job groups
         int workSizeCount = work.size();
         int numGroups = Math.min(workSizeCount, maxTasks);
