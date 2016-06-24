@@ -66,7 +66,7 @@ public class ReadYourWritesOffsetStorageAdapter {
         if (offsets.keySet().contains(partition.encoded)) {
             return true;
         } else {
-            logger.error("Didn't find the key {} in offset storage", partition.encoded);
+            logger.trace("Didn't find the key {} in offset storage", partition.encoded);
             return cache.containsKey(partition.encoded);
         }
     }
@@ -75,7 +75,7 @@ public class ReadYourWritesOffsetStorageAdapter {
         if (offsets.get(partition.encoded) != null) {
             return Optional.of(SourceOffset.decode(offsets.get(partition.encoded)));
         } else {
-            logger.error("Didn't find the key {} in offset storage so trying from cache", partition.key);
+            logger.trace("Didn't find the key {} in offset storage so trying from cache", partition.encoded);
             return Optional.ofNullable(SourceOffset.decode(cache.get(partition.encoded)));
         }
     }

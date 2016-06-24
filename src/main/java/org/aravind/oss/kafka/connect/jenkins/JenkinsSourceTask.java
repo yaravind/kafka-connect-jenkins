@@ -77,13 +77,13 @@ public class JenkinsSourceTask extends SourceTask {
         try {
             client = new JenkinsClient(new URL(jobUrl + "api/json"), getJenkinsConnTimeout(), getJenkinsReadTimeout());
         } catch (MalformedURLException e) {
-            logger.error("Can't create URL object for {}.", jobUrl, e);
+            logger.error("Can't create URL object for Jenkins server at {}.", jobUrl, e);
             //TODO Silently log the error and ignore? What should we do?
         }
         Optional<String> resp = Optional.empty();
         if (client != null) {
             try {
-                logger.trace("GET job details for {}", jobUrl + "api/json");
+                logger.debug("GET job details for {}", jobUrl + "api/json");
                 resp = client.get();
             } catch (JenkinsException e) {
                 logger.warn("Can't do a GET to resource {}", jobUrl + "api/json", e);
@@ -100,7 +100,7 @@ public class JenkinsSourceTask extends SourceTask {
                     logger.error("Error while parsing the Build JSON {} for {}", resp.get(), jobUrl + "api/json", e);
                 }
 
-                logger.debug("Builds are: {}", builds);
+                logger.trace("Builds are: {}", builds);
 
                 if (builds != null) {
                     SourcePartition partition = partitions.make(builds.getName());
@@ -112,7 +112,7 @@ public class JenkinsSourceTask extends SourceTask {
 
                     if (lastBuild != null && !lastBuild.getNumber().equals(lastSavedBuildNumber)) {
                         Long offsetValue = lastBuild.getNumber();
-                        logger.trace("Partition: {}, lastBuild: {}, lastSavedBuild: {}", partition.value, offsetValue, lastSavedBuildNumber);
+                        logger.debug("Partition: {}, lastBuild: {}, lastSavedBuild: {}", partition.value, offsetValue, lastSavedBuildNumber);
                         SourceOffset sourceOffset = SourceOffset.make(BUILD_NUMBER, offsetValue);
 
                         //get Build details
@@ -122,7 +122,7 @@ public class JenkinsSourceTask extends SourceTask {
 
                         if (lastBuildDetails.isPresent()) {
                             //add build details JSON string as the value
-                            logger.error("Create SourceRecord for {}", partition.value);
+                            logger.debug("Create SourceRecord for {}", partition.value);
                             SourceRecord record = new SourceRecord(partition.encoded, sourceOffset.encoded, taskProps.get(TOPIC_CONFIG), Schema.STRING_SCHEMA, partition.value, Schema.STRING_SCHEMA, lastBuildDetails.get());
                             storageAdapter.cache(partition, sourceOffset);
 
@@ -166,7 +166,7 @@ public class JenkinsSourceTask extends SourceTask {
             logger.debug("now: {}, nextUpdate: {}, untilNext: {}", sdf.format(new Date(now)), sdf.format(new Date(nextUpdate)), untilNext);
 
             if (untilNext > 0) {
-                logger.debug("Waiting {} ms before next pull", untilNext);
+                logger.info("Waiting {} ms before next pull", untilNext);
                 time.sleep(untilNext);
                 continue;
             }
@@ -182,12 +182,12 @@ public class JenkinsSourceTask extends SourceTask {
 
                 SourcePartition partition = partitions.make(urlDecode(extractJobName(jobUrl)));
 
-                logger.debug("Get lastSavedOffset for: {} with partitionValue: {}", jobUrl, partition.value);
+                logger.trace("Get lastSavedOffset for: {} with partitionValue: {}", jobUrl, partition.value);
                 Optional<SourceOffset> offset = storageAdapter.getOffset(partition);
 
                 Long lastSavedBuildNumber = null;
                 if (offset.isPresent()) {
-                    logger.debug("lastSavedOffset for {} is: {}", partition.value, offset);
+                    logger.debug("lastSavedOffset for {} is: {}", partition.value, offset.get());
                     lastSavedBuildNumber = (Long) offset.get().value;
                 } else {
                     logger.debug("lastSavedOffset not available for: {}", partition.value);
@@ -196,11 +196,11 @@ public class JenkinsSourceTask extends SourceTask {
                 if (sourceRecord.isPresent()) records.add(sourceRecord.get());
             }
 
-            logger.error("Total SourceRecords created: {}. Returning these from poll()", records.size());
+            logger.info("Total SourceRecords created: {}. Returning these from poll()", records.size());
 
             //Update the last updated time to now just before returning the call
             lastUpdate = time.milliseconds();
-            logger.error("Setting the lastUpdate time to : {}", sdf.format(new Date(lastUpdate)));
+            logger.debug("Setting the lastUpdate time to : {}", sdf.format(new Date(lastUpdate)));
 
             totalJenkinsPulls++;
             return records;

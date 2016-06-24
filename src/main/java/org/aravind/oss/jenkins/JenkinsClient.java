@@ -87,7 +87,7 @@ public class JenkinsClient {
     }
 
     public Optional<String> get() throws JenkinsException {
-        logger.debug("GET to {}", resourceUrl);
+        logger.trace("GET to {}", resourceUrl);
         HttpURLConnection conn = connect();
 
         try {

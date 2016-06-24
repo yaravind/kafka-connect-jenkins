@@ -40,7 +40,7 @@ public class JenkinsSourceConnector extends SourceConnector {
      */
     @Override
     public void start(Map<String, String> props) {
-        logger.debug("Starting the Jenkins Connector");
+        logger.info("JenkinsSourceConnector starting");
         jenkinsCfg = new JenkinsSourceConfig(props);
 
         //Do a test connection to Fail Fast
@@ -90,7 +90,7 @@ public class JenkinsSourceConnector extends SourceConnector {
 
     @Override
     public void stop() {
-        logger.debug("Stopping the Connector");
+        logger.info("JenkinsSourceConnector stopping");
         //Not used at this moment
     }
 
