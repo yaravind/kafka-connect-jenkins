@@ -3,6 +3,8 @@
 
 # Kafka Connect Jenkins
 
+[![Join the chat at https://gitter.im/yaravind/kafka-connect-jenkins](https://badges.gitter.im/yaravind/kafka-connect-jenkins.svg)](https://gitter.im/yaravind/kafka-connect-jenkins?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Kafka Connect Connector for [Jenkins](https://jenkins.io/) Open Source Continuous Integration Tool. **The connector is currently in ALPHA release. Looking for early adopters.**
 
 ## What is it?
