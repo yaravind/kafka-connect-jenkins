@@ -118,6 +118,21 @@ and deployments of various components or services. We usually see each business 
 their own Jenkins instance. Any such organization can benefit from treating **build events** same like any other
 transactional or master data. [Here are some use-cases](https://github.com/yaravind/kafka-connect-jenkins/wiki/Use-cases) that these **build events** can enable.
 
+### Configurations
+
+| Property | Description | Required? | Default value | 
+|----------|-------------|------------|---------------|
+|`connector.class`|Class implementing source connector for Jenkins.|Yes|org.aravind.oss.kafka.connect.<br/>jenkins.JenkinsSourceConnector|
+|`tasks.max`| |Yes|1|
+|`jenkins.base.url`|The URL where jenkins server is running|Yes|None|
+|`jenkins.pollIntervalInMillis`|Frequency (in milliseconds) to poll for new build events in Jenkins|Yes|1 minute|
+|`jenkins.username`|If your Jenkins is secured, you can provide the username with this property|No|None|
+|`jenkins.password.or.api.token`|If your Jenkins is secured, you can provide the password or api token with this property|No|None|
+|`jenkins.connection.timeoutInMillis`|Connection timeout in milliseconds. This denotes the time elapsed before the connection established or Server responded to connection request.|Yes|500|
+|`jenkins.read.timeoutInMillis`|Response read timeout in milliseconds. After establishing the connection, the client socket waits for response after sending the request. This is the elapsed time since the client has sent request to the server before server responds.|Yes|3000|
+|`jenkins.jobs.resource.path`|Relative path to REST API|Yes|`/api/json`|
+|`topic`|Name of the topic where the Build status records are written to. **Make sure you explicitly create this topic using tools provided by Kafka. Do not rely on the default topic creation functionality in PRODUCTION.**|Yes|jenkins.connector.topic|
+
 ## How to use it?
 
 ### Standalone mode
@@ -158,6 +173,10 @@ You can enable the logging for the connector by adding `log4j.logger.org.aravind
 | `http://localhost:8083/connectors/kafka-jenkins-source-connector/config` | JenkinsSourceConnector config |
 | `http://localhost:8083/connectors/kafka-jenkins-source-connector/tasks` | JenkinsSourceConnector tasks |
 
+## Contribute
+
+- Source code: https://github.com/yaravind/kafka-connect-jenkins
+- Issue tracker: https://github.com/yaravind/kafka-connect-jenkins/issues
 
 ### Dependencies
 
@@ -167,26 +186,6 @@ You can enable the logging for the connector by adding `log4j.logger.org.aravind
 - [Snap CI](https://snap-ci.com/yaravind/kafka-connect-jenkins/branch/master) for Continuous Integration
 - [JaCoCo](https://github.com/jacoco/jacoco) and [Coveralls](https://coveralls.io/github/yaravind/kafka-connect-jenkins) for code coverage
 - [Codacy](https://www.codacy.com/app/yaravind/kafka-connect-jenkins/dashboard) to measure code quality
-
-### Configurations
-
-| Property | Description | Required? | Default value | 
-|----------|-------------|------------|---------------|
-|`connector.class`|Class implementing source connector for Jenkins.|Yes|org.aravind.oss.kafka.connect.<br/>jenkins.JenkinsSourceConnector|
-|`tasks.max`| |Yes|1|
-|`jenkins.base.url`|The URL where jenkins server is running|Yes|None|
-|`jenkins.pollIntervalInMillis`|Frequency (in milliseconds) to poll for new build events in Jenkins|Yes|1 minute|
-|`jenkins.username`|If your Jenkins is secured, you can provide the username with this property|No|None|
-|`jenkins.password.or.api.token`|If your Jenkins is secured, you can provide the password or api token with this property|No|None|
-|`jenkins.connection.timeoutInMillis`|Connection timeout in milliseconds. This denotes the time elapsed before the connection established or Server responded to connection request.|Yes|500|
-|`jenkins.read.timeoutInMillis`|Response read timeout in milliseconds. After establishing the connection, the client socket waits for response after sending the request. This is the elapsed time since the client has sent request to the server before server responds.|Yes|3000|
-|`jenkins.jobs.resource.path`|Relative path to REST API|Yes|`/api/json`|
-|`topic`|Name of the topic where the Build status records are written to. **Make sure you explicitly create this topic using tools provided by Kafka. Do not rely on the default topic creation functionality in PRODUCTION.**|Yes|jenkins.connector.topic|
-
-## Contribute
-
-- Source code: https://github.com/yaravind/kafka-connect-jenkins
-- Issue tracker: https://github.com/yaravind/kafka-connect-jenkins/issues
 
 ## License
 
