@@ -138,13 +138,26 @@ While testing, you might want to run the connector in standalone mode. Follow th
 
 ### Logging
 
-You can enable the logging for the connector by adding `log4j.logger.org.aravind.oss=DEBUG` (TRACE) to `connect-log4j.properties`. 
+You can enable the logging for the connector by adding `log4j.logger.org.aravind.oss=DEBUG` (TRACE) to `connect-log4j.properties`. Following table can help you with finer level of logging.
 
 | Intent | Configuration (`DEBUG` or `TRACE`) |
-|--|
+|--|--|
 | Enable logging for Jenkins **Source Connector** only  | `log4j.logger.org.aravind.oss.kafka.connect.jenkins.JenkinsSourceConnector=DEBUG`<br/>`log4j.logger.org.aravind.oss.kafka.connect.lib.TaskConfigBuilder=DEBUG` |
 | Enable logging for Jenkins **Source Task** only | `log4j.logger.org.aravind.oss.kafka.connect.jenkins.JenkinsSourceTask=DEBUG`<br/>`log4j.logger.org.aravind.oss.kafka.connect.jenkins.ReadYourWritesOffsetStorageAdapter=ERROR`<br/>`log4j.logger.org.aravind.oss.kafka.connect.lib.Partitions=DEBUG`|
 | Enable logging for communication with Jenkins API only | `log4j.logger.org.aravind.oss.jenkins.JenkinsClient=TRACE` |
+
+### Monitoring
+
+> Replace `localhost` with your server and `8083` with `rest.port` configuration value.
+
+| REST API | Details |
+|--|--|
+| `http://localhost:8083/` | Kafka Connector |
+| `http://localhost:8083/connectors/` | All deployed connectors |
+| `http://localhost:8083/connectors/kafka-jenkins-source-connector/` | JenkinsSourceConnector |
+| `http://localhost:8083/connectors/kafka-jenkins-source-connector/config` | JenkinsSourceConnector config |
+| `http://localhost:8083/connectors/kafka-jenkins-source-connector/tasks` | JenkinsSourceConnector tasks |
+
 
 ### Dependencies
 
