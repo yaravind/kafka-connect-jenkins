@@ -43,7 +43,7 @@ class JenkinsSourceConnectorTest extends Specification {
 
     def "Config - Wrong jenkins url should throw exception"() {
         when:
-        sourceProps.put(JenkinsSourceConfig.JENKINS_BASE_URL_CONFIG, 'https://wrong.domain.name')
+        sourceProps.put(JenkinsSourceConfig.JENKINS_BASE_URL_CONFIG, 'http://wrong.domain.name')
         connector.start(sourceProps)
 
         then:
