@@ -36,10 +36,7 @@ class JenkinsClientTest extends Specification {
         mock = runner(server)
         mock.start()
 
-        //trust the self-signed cert.jks
-        System.setProperty("javax.net.ssl.trustStore", "src/test/resources/cert.jks")
-
-        def httpsServer = httpsServer(9443, HttpsCertificate.certificate(pathResource("cert.jks"), "mocohttps", "mocohttps"))
+        def httpsServer = httpsServer(9443, HttpsCertificate.certificate(pathResource("keystore.jks"), "password", "password"))
         httpsMock = runner(httpsServer)
         httpsMock.start()
     }
@@ -147,10 +144,7 @@ class JenkinsClientTest extends Specification {
     def "Supports Jenkins with SSL and Basic Authentication"() {
         given: "Correct username and password"
 
-        //trust the self-signed cert.jks
-        setTrustStore("/cert.jks", "mocohttps")
-
-        def httpsServer = httpsServer(10443, HttpsCertificate.certificate(pathResource("cert.jks"), "mocohttps", "mocohttps"))
+        def httpsServer = httpsServer(10443, HttpsCertificate.certificate(pathResource("keystore.jks"), "password", "password"))
         httpsServer.request(
                 exist(header("Authorization", "Basic dXNlcjpwYXNzd29yZA=="))
         )
