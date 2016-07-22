@@ -154,7 +154,7 @@ While testing, you might want to run the connector in standalone mode. Follow th
 6. Clone https://github.com/yaravind/kafka-connect-jenkins.git
 7. Run `mvn clean install`
 8. Update the `jenkins.base.url` property in `connect-jenkins-source.properties` file with your jenkins base url
-9. Add Jenkins connector to classpath and start the connector in standalone mode `CLASSPATH=./target/kafka-connect-jenkins-0.5.0-SNAPSHOT-package/share/java/kafka-connect-jenkins/* /Users/p0c/tools/confluent-3.0.0/bin/connect-standalone connect-standalone.properties connect-jenkins-source.properties`
+9. Add Jenkins connector to classpath and start the connector in standalone mode `CLASSPATH=./target/kafka-connect-jenkins-0.5.0-SNAPSHOT-package/share/java/kafka-connect-jenkins/* <<path-to-confluent-home-directory>>/bin/connect-standalone connect-standalone.properties connect-jenkins-source.properties`
    
 > If you need to proxy to connect to Jenkins then append these to the above command `-Dhttp.proxyHost=... -Dhttp.proxyPort=... -Dhttps.proxyHost=... -Dhttps.proxyPort=...`
 
