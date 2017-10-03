@@ -14,6 +14,8 @@ public class JenkinsItem {
     protected JenkinsClient client;
     protected int connTimeoutInMillis;
     protected int readTimeoutInMillis;
+    protected String username;
+    protected String password;
 
     public int getReadTimeoutInMillis() {
         return readTimeoutInMillis;
@@ -37,5 +39,21 @@ public class JenkinsItem {
 
     public void setClient(JenkinsClient client) {
         this.client = client;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username  = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

@@ -46,7 +46,12 @@ public class JenkinsSourceConnector extends SourceConnector {
         //Do a test connection to Fail Fast
         try {
             logger.trace("Doing a test connection to {}", jenkinsCfg.getJobsResource());
-            client = new JenkinsClient(jenkinsCfg.getJobsResource(), jenkinsCfg.getJenkinsConnTimeout(), jenkinsCfg.getJenkinsReadTimeout());
+	    if (jenkinsCfg.isProtected()) {
+		client = new JenkinsClient(jenkinsCfg.getJobsResource(), jenkinsCfg.getUsername(), jenkinsCfg.getPasswordOrApiToken(), jenkinsCfg.getJenkinsConnTimeout(), jenkinsCfg.getJenkinsReadTimeout());
+	    }
+	    else {
+		client = new JenkinsClient(jenkinsCfg.getJobsResource(), jenkinsCfg.getJenkinsConnTimeout(), jenkinsCfg.getJenkinsReadTimeout());
+	    }
             HttpURLConnection connection = client.connect();
             connection.disconnect();
         } catch (JenkinsException e) {
