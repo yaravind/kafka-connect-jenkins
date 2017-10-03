@@ -75,8 +75,18 @@ public class JenkinsSourceTask extends SourceTask {
         JenkinsClient client = null;
 
         try {
-            client = new JenkinsClient(new URL(jobUrl + "api/json"), getJenkinsConnTimeout(), getJenkinsReadTimeout());
-        } catch (MalformedURLException e) {
+	    if (getJenkinsUsername() != null && !getJenkinsUsername().isEmpty()) {
+                client = new JenkinsClient(new URL(jobUrl + "api/json"), getJenkinsUsername(), getJenkinsPassword(), getJenkinsConnTimeout(), getJenkinsReadTimeout());
+            }
+            else {
+		client = new JenkinsClient(new URL(jobUrl + "api/json"), getJenkinsConnTimeout(), getJenkinsReadTimeout());
+	    }            
+        } 
+	catch (JenkinsException je) {
+  	    logger.error("Can't create URL object for Jenkins server at {}.", jobUrl, je);
+            //TODO Silently log the error and ignore? What should we do?
+	}
+	catch (MalformedURLException e) {
             logger.error("Can't create URL object for Jenkins server at {}.", jobUrl, e);
             //TODO Silently log the error and ignore? What should we do?
         }
@@ -118,6 +128,8 @@ public class JenkinsSourceTask extends SourceTask {
                         //get Build details
                         lastBuild.setConnTimeoutInMillis(getJenkinsConnTimeout());
                         lastBuild.setReadTimeoutInMillis(getJenkinsReadTimeout());
+			lastBuild.setUsername(getJenkinsUsername());
+			lastBuild.setPassword(getJenkinsPassword());
                         Optional<String> lastBuildDetails = lastBuild.getDetails();
 
                         if (lastBuildDetails.isPresent()) {
@@ -229,4 +241,13 @@ public class JenkinsSourceTask extends SourceTask {
     private int getJenkinsConnTimeout() {
         return Integer.valueOf(taskProps.getOrDefault(JENKINS_CONN_TIMEOUT_CONFIG, valueOf(JENKINS_CONN_TIMEOUT_DEFAULT)));
     }
+
+    private String getJenkinsUsername() {
+        return String.valueOf(taskProps.getOrDefault(JENKINS_USERNAME_CONFIG, ""));
+    }
+
+    private String getJenkinsPassword() {
+        return String.valueOf(taskProps.getOrDefault(JENKINS_PASSWORD_OR_API_TOKEN_CONFIG, ""));
+    }
+
 }

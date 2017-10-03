@@ -42,9 +42,16 @@ public class Build extends JenkinsItem {
 
     public Optional<String> getDetails() {
         logger.debug("GET build details for {}", getBuildDetailsResource());
+	String username = getUsername();
+	String password = getPassword();
         try {
-            setClient(new JenkinsClient(new URL(getBuildDetailsResource()), getConnTimeoutInMillis(), getReadTimeoutInMillis()));
-            return getClient().get();
+            if (username != null && !username.isEmpty()) {
+	    setClient(new JenkinsClient(new URL(getBuildDetailsResource()), username, password, getConnTimeoutInMillis(), getReadTimeoutInMillis()));
+	}	
+	else {
+	    setClient(new JenkinsClient(new URL(getBuildDetailsResource()), getConnTimeoutInMillis(), getReadTimeoutInMillis()));
+	}
+	    return getClient().get();
         } catch (MalformedURLException | JenkinsException e) {
             logger.error("WARNING only. Unable to get the build details from {}", getUrl(), e);
             return Optional.empty();

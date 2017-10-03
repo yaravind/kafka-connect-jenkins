@@ -64,14 +64,14 @@ public class JenkinsClient {
         logger.trace("Connecting to {} with conn timeout {} ms and read timeout {} ms", resourceUrl, connTimeoutInMillis, readTimeoutInMillis);
         HttpURLConnection conn = null;
         try {
-            conn = (HttpURLConnection) resourceUrl.openConnection();
+	    logger.trace("Using username {} for connection.", userName);
+	    conn = (HttpURLConnection) resourceUrl.openConnection();
             conn.setConnectTimeout(connTimeoutInMillis);
             conn.setReadTimeout(readTimeoutInMillis);
-            if (userName.isPresent()) {
+	    if (userName.isPresent()) {
                 conn.setRequestProperty("Authorization", "Basic " + getAuthenticationString());
                 logger.trace("Using Basic Authentication with username {}", userName);
             }
-
             conn.connect();
 
             return conn;
